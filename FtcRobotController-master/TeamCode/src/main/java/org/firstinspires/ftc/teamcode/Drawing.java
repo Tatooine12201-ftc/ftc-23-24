@@ -15,7 +15,6 @@ public class Drawing {
     }
     public void stop (){
         drawing.setPower(0);
-
     }
 
 }

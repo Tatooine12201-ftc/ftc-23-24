@@ -18,12 +18,15 @@ public class teleop extends LinearOpMode {
 
             while (opModeIsActive() && !isStopRequested()) {
                 driveTrain.Drive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_trigger - gamepad1.left_trigger);
-                if (gamepad2.right_bumper == true) {
+
+                if (gamepad2.right_bumper) {
                     drawing.Power(1);
                 }
-
+                else{
+                    drawing.stop();
+                }
             }
-            drawing.stop();
+            //drawing.stop();
         }
     }
 

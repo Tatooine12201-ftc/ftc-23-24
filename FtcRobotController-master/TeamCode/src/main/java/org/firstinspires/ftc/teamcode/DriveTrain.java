@@ -47,6 +47,9 @@ public class DriveTrain {
         double rotX = X * Math.cos(-heading) - Y * Math.sin(-heading);
         double rotY = X * Math.sin(-heading) + Y * Math.cos(-heading);
 
+        //double rotX = X;
+        //double rotY = Y;
+
         rotX = rotX * 1.1;  // Counteract imperfect strafing
 
         // Denominator is the largest motor power (absolute value) or 1
