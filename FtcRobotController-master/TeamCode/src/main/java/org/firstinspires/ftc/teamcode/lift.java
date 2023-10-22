@@ -18,7 +18,7 @@ public class lift {
 
     private  final double kp = 0.555;
 
-    
+
     public lift(DcMotor liftMotor) {
         LiftMotor = liftMotor;
         LiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

@@ -25,6 +25,13 @@ public class teleop extends LinearOpMode {
                 else{
                     drawing.stop();
                 }
+
+                telemetry.addData("m1",driveTrain.getlbm());
+                telemetry.addData("m2",driveTrain.getlfm());
+                telemetry.addData("m3",driveTrain.getrbm());
+                telemetry.addData("m4",driveTrain.getrfm());
+                telemetry.update();
+
             }
             //drawing.stop();
         }

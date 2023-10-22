@@ -18,6 +18,8 @@ import java.util.List;
 public class Color_Detector extends OpenCvPipeline{
     Telemetry telemetry;
     Mat mat = new Mat();
+
+
     static final Rect Left_Roi = new Rect(
             new Point(60, 35),
             new Point(120, 75));
@@ -38,8 +40,16 @@ public class Color_Detector extends OpenCvPipeline{
     @Override
     public Mat processFrame(Mat input) {
         Imgproc.cvtColor(input, mat, Imgproc.COLOR_RGB2HSV);
-        Scalar lowHSV = new Scalar(25, 50, 50);
-        Scalar hghHSV = new Scalar(32, 255, 255);
+
+        // working blue
+        Scalar lowHSV = new Scalar(110, 50, 50);
+        Scalar hghHSV = new Scalar(130, 255, 255);
+
+        /*
+        // working red
+        Scalar lowHSV = new Scalar(0, 50, 70);
+        Scalar hghHSV = new Scalar(10, 255, 255);
+         */
         Core.inRange(mat, lowHSV, hghHSV, mat);
         Mat left = mat.submat(Left_Roi);
         Mat right = mat.submat(Right_Roi);
