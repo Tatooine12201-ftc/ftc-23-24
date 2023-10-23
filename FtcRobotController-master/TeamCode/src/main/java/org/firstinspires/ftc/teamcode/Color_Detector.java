@@ -15,27 +15,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Color_Detector extends OpenCvPipeline{
+public class Color_Detector extends OpenCvPipeline {
     Telemetry telemetry;
     Mat mat = new Mat();
 
+    public enum Location {
+        LEFT,
+        MIDDLE,
+        RIGHT,
+        NOT_FOUND
+    }
 
-    static final Rect Left_Roi = new Rect(
-            new Point(60, 35),
-            new Point(120, 75));
-    static final Rect Right_Roi = new Rect(
-            new Point(140, 35),
-            new Point(200, 75));
-        public void TPD(Telemetry t) { telemetry = t;}
+    private Location location;
 
-
-
+    static final Rect LEFT_ROI = new Rect(
+            new Point(40, 40),
+            new Point(253, 408));
+    static final Rect MIDDLE_ROI = new Rect(
+            new Point(292, 40),
+            new Point(506, 408));
+    static final Rect RIGHT_ROI = new Rect(
+            new Point(546, 40),
+            new Point(759, 408));
+    static double COLOR_THRESHOLD = 0.4;
 
     List<MatOfPoint> contours;
     Mat hierachy;
 
 
-    public Color_Detector(Telemetry t) { telemetry=t;}
+    public Color_Detector(Telemetry t) {
+        telemetry = t;
+    }
 
     @Override
     public Mat processFrame(Mat input) {
@@ -50,22 +60,63 @@ public class Color_Detector extends OpenCvPipeline{
         Scalar lowHSV = new Scalar(0, 50, 70);
         Scalar hghHSV = new Scalar(10, 255, 255);
          */
-        Core.inRange(mat, lowHSV, hghHSV, mat);
-        Mat left = mat.submat(Left_Roi);
-        Mat right = mat.submat(Right_Roi);
 
-        double leftValue = Core.sumElems(left).val[0] / Left_Roi.area() / 255;
-        double rightValue = Core.sumElems(left).val[0] / Right_Roi.area() / 255;
+        Core.inRange(mat, lowHSV, hghHSV, mat);
+        Mat left = mat.submat(LEFT_ROI);
+        Mat right = mat.submat(RIGHT_ROI);
+        Mat middle = mat.submat(MIDDLE_ROI);
+
+        double leftValue = Core.sumElems(left).val[0] / LEFT_ROI.area() / 255;
+        double rightValue = Core.sumElems(right).val[0] / RIGHT_ROI.area() / 255;
+        double middleValue = Core.sumElems(middle).val[0] / MIDDLE_ROI.area() / 255;
 
         left.release();
         right.release();
+        middle.release();
 
-        telemetry.addData("Left raw value", (int)Core.sumElems(left).val[0]);
-        telemetry.addData("Right raw value", (int)Core.sumElems(right).val[0]);
-        telemetry.addData("Left percentage",Math.round(leftValue*100)+"%");
-        telemetry.addData("Right percentage",Math.round(rightValue*100)+"%");
+        telemetry.addData("Left raw value", (int) Core.sumElems(left).val[0]);
+        telemetry.addData("Right raw value", (int) Core.sumElems(right).val[0]);
+        telemetry.addData("Left percentage", Math.round(leftValue * 100) + "%");
+        telemetry.addData("Right percentage", Math.round(rightValue * 100) + "%");
+        telemetry.addData("middle raw value", (int) Core.sumElems(middle).val[0]);
+        telemetry.addData("middle percentage", Math.round(middleValue * 100) + "%");
+
+
+        boolean Left = leftValue > rightValue && leftValue > middleValue;
+        boolean Right = rightValue > leftValue && rightValue > middleValue;
+        boolean Middle = middleValue > rightValue && middleValue > leftValue;
+
+        if (Middle) {
+            location = Location.MIDDLE;
+            telemetry.addData("TeamProp Location", "middle");
+        } else if (Right) {
+            location = Location.RIGHT;
+            telemetry.addData("TeamProp Location", "right");
+        } else if (Left) {
+            location = Location.LEFT;
+            telemetry.addData("TeamProp Location", "left");
+        } else {
+            location = Location.NOT_FOUND;
+            telemetry.addData("TeamProp Location", "not found");
+        }
+        telemetry.update();
+
+
+
+        Imgproc.cvtColor(mat, mat, Imgproc.COLOR_GRAY2RGB);
+
+        Scalar Acolor_cub = new Scalar(0, 255, 0);
+        Scalar Bcolor_cub = new Scalar(255, 0, 0);
+
+        Imgproc.rectangle(mat, LEFT_ROI, location == Location.LEFT ? Acolor_cub : Bcolor_cub);
+        Imgproc.rectangle(mat, RIGHT_ROI, location == Location.RIGHT ? Acolor_cub : Bcolor_cub);
+        Imgproc.rectangle(mat, MIDDLE_ROI, location == Location.MIDDLE ? Acolor_cub : Bcolor_cub);
         return mat;
     }
 
+    public Location getLocation() {
+        return location;
 
+
+    }
 }
