@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import androidx.annotation.NonNull;
-
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,12 +8,14 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
+
 import static java.lang.Math.max;
 import static java.lang.Math.min;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import com.qualcomm.robotcore.util.Range;
 
 public class DriveTrain {
     private DcMotor RFM = null;
@@ -23,12 +23,13 @@ public class DriveTrain {
     private DcMotor LFM = null;
     private DcMotor LBM = null;
     private final LinearOpMode opMode;
-    //  private IMU imu;
-    // private IMU.Parameters myIMUparameters;
-    //private IMU.Parameters RevHubOrientationOnRobot;
+
+
     private double heading;
     private IMU imu = null;
     public static double FORWARD_OFFSET = 20.97;
+    public static double X_OFFSET = -143.85;
+    public static double Y_OFFSET = 0;
 
     double prevRightEncoderPos = 0;
     double prevLeftEncoderPos = 0;
@@ -41,10 +42,12 @@ public class DriveTrain {
     private double robotHading_CCWP = 0;
     private static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
     private double fieldX = 0;
+    private double fieldY = 0;
     double reset = 0;
     private static final double COUNTS_PER_MM = (TICKS_PER_REV * GEAR_RATIO) / WHEEL_CIRCUMFERENCE;
-    private double fieldY = 0;
+
     public static double LATERAL_DISTANCE = 127.5;
+
     private static final double TPI = Math.PI * 2;
 
     public double startX = 0;
@@ -52,9 +55,14 @@ public class DriveTrain {
     public double startR = 0;
 
 
-    IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-            RevHubOrientationOnRobot.LogoFacingDirection.UP,
-            RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
+    double wantedAngle = 0;
+    double NewAngle = 0;
+
+    private final Pid xPid = new Pid(0, 0, 0, 0);
+
+    private final Pid yPid = new Pid(0, 0, 0, 0);
+
+    private final Pid rPid = new Pid(0, 0, 0, 0);
 
 
     public DriveTrain(HardwareMap hw, LinearOpMode opMode) {
@@ -65,30 +73,43 @@ public class DriveTrain {
         LBM = hw.get(DcMotor.class, "LBM");
         imu = hw.get(IMU.class, "imu");
 
+
         RFM.setDirection(DcMotorSimple.Direction.REVERSE);
         RBM.setDirection(DcMotorSimple.Direction.REVERSE);
         LFM.setDirection(DcMotorSimple.Direction.FORWARD);
         LBM.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        // imu
-
-        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
-        RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
-        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
-
 
         RFM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RBM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LFM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LBM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
+        RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
+        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
+
+        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
         imu = hw.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(orientationOnRobot));
         imu.initialize(parameters);
 
+        // x
+        xPid.setTolerance(0);
+        xPid.setIntegrationBounds(0,0);
+        //y
+        yPid.setIntegrationBounds(0,0);
+        yPid.setTolerance(10);
+        //R
+        rPid.setIntegrationBounds(0,0);
+        rPid.setTolerance(Math.toRadians(0));
+
 
 
     }
+
+
     public void reset() {
         //reset the encoders that are used for Xr, Xl and Y
         LFM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -113,6 +134,7 @@ public class DriveTrain {
             wasReset = false;
         }
     }
+
     public double NormalizeAngle(double angle) {
         while (angle > Math.PI) {
             angle -= TPI;
@@ -122,24 +144,35 @@ public class DriveTrain {
         }
         return angle;
     }
+
     public double Heading() {
         //return the heading of the robot (ccw is positive) in radians (0 to 2pi) and make sure that the start R is taken into account
         robotHading_CWP = imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle + startR - reset; //cw is positive
         robotHading_CCWP = -robotHading_CWP; //ccw is positive
         return NormalizeAngle(robotHading_CCWP); //normalize the angle to be between -pi and pi
     }
+
     public double getXlEncoder() {
         return -LBM.getCurrentPosition();
     }
+
     public double getXrEncoder() {
         return -RFM.getCurrentPosition();
     }
+
     public double getYEncoder() {
         return LFM.getCurrentPosition();
+    }
+    public double getFieldX() {
+        return fieldX;
+    }
+    public double getFieldY() {
+        return fieldY;
     }
     public double ticksToMM(double ticks) {
         return ticks / COUNTS_PER_MM;
     }
+
     private void update() {
         //save the Encoder position
         double leftEncoderPos = getXlEncoder();
@@ -172,6 +205,17 @@ public class DriveTrain {
         prevCenterEncoderPos = centerEncoderPos;
 
     }
+    public double[]  fieldToRobotConvert(double deltaX ,double deltaY) {
+        //convert the  field deltas to robot deltas
+        double[] pos = new double[2];
+        double robotDeltaX = deltaX * Math.cos(Heading()) - deltaY * Math.sin(Heading());
+        double robotDeltaY = deltaX * Math.sin(Heading()) + deltaY * Math.cos(Heading());
+        pos[0] = robotDeltaX;
+        pos[1] = robotDeltaY;
+
+        return pos;
+    }
+
 
     public void ResetAngle() {
         double reset = imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle;
@@ -186,6 +230,7 @@ public class DriveTrain {
         }
         return angle;
     }
+
     public void setStartPos(double x, double y, double r) {
         //set the start position
         startX = x;
@@ -197,24 +242,12 @@ public class DriveTrain {
     }
 
 
-
-
-
-
-    public void Drive(double X, double Y, double RX){
-        heading = imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle;
+    public void Drive(double X, double Y, double RX) {
+        double heading  = Heading();
 
         double rotX = X * Math.cos(heading) - Y * Math.sin(heading);
         double rotY = X * Math.sin(heading) + Y * Math.cos(heading);
 
-        //double rotX = X;
-        //double rotY = Y;
-
-       // rotX = rotX * 1.1;  // Counteract imperfect strafing
-
-        // Denominator is the largest motor power (absolute value) or 1
-        // This ensures all the powers maintain the same ratio,
-        // but only if at least one is out of the range [-1, 1]
         double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(RX), 1);
         double frontLeftPower = (rotY + rotX + RX) / denominator;
         double backLeftPower = (rotY - rotX + RX) / denominator;
@@ -234,6 +267,35 @@ public class DriveTrain {
 
 
     }
+
+    public boolean driveTo(double x, double y, double r) {
+        double xPower = 0;
+        double yPower = 0;
+        double rPower = 0;
+        double[] curPos = new double[2];
+        double[] dstPos = new double[2];
+        //calculate the error in the position
+        curPos = fieldToRobotConvert(fieldX,fieldY);
+        dstPos = fieldToRobotConvert(x,y);
+        //calculate the power needed to get to the position
+        xPower = xPid.calculate(curPos[0],dstPos[0]);
+        yPower = yPid.calculate(curPos[1],dstPos[1]);
+        rPower = rPid.calculate(Heading(),Math.toRadians(r));
+        //limit the power to 0.7
+        xPower = Range.clip(xPower, 0, 0);
+        yPower = Range.clip(yPower, 0, 0);
+        //drive the robot to the position with the calculated power and the robot is field centric
+
+        Drive(-yPower,xPower, rPower);
+        while ((!xPid.atSetPoint() || !yPid.atSetPoint()|| !rPid.atSetPoint()) && opMode.opModeIsActive() && !opMode.isStopRequested());//if the robot is at the position (or the op mode is off) then stop the loop
+        //stop the robot
+        Drive(0, 0, 0);
+        //return true if the robot is at the position
+        return true;
+    }
+
+
+
     public double getlbm (){
         return LBM.getPower();
     }
@@ -248,6 +310,10 @@ public class DriveTrain {
     public double getlfm (){
         return LFM.getPower();
     }
-
+ public  double Head(){
+     double heading = Heading();
+        return heading;
+ }
 }
+
 
