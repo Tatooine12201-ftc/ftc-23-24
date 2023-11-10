@@ -76,8 +76,8 @@ public class DriveTrain {
 
 
         RFM.setDirection(DcMotorSimple.Direction.REVERSE);
-        RBM.setDirection(DcMotorSimple.Direction.REVERSE);
-        LFM.setDirection(DcMotorSimple.Direction.FORWARD);
+        RBM.setDirection(DcMotorSimple.Direction.FORWARD);
+        LFM.setDirection(DcMotorSimple.Direction.REVERSE);
         LBM.setDirection(DcMotorSimple.Direction.FORWARD);
 
         RFM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -86,7 +86,7 @@ public class DriveTrain {
         LBM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
-        RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
+        RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
 
 
 
@@ -99,6 +99,7 @@ public class DriveTrain {
         imu = hw.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(orientationOnRobot));
         imu.initialize(parameters);
+        reset();
 
         // x
         xPid.setTolerance(0);
@@ -222,7 +223,7 @@ public class DriveTrain {
     }
 
 
-    public void ResetAngle() {
+    public void ResetAngle(boolean headings) {
         double reset = imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle;
     }
 

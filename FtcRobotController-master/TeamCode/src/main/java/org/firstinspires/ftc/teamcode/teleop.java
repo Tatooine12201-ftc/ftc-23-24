@@ -13,7 +13,7 @@ public class teleop extends LinearOpMode {
         public void runOpMode() {
             DriveTrain driveTrain = new DriveTrain(hardwareMap, this);
             Drawing drawing = new Drawing(hardwareMap,this);
-
+            driveTrain.reset();
             waitForStart();
 
             while (opModeIsActive() && !isStopRequested()) {
@@ -25,6 +25,7 @@ public class teleop extends LinearOpMode {
                 else{
                     drawing.stop();
                 }
+                driveTrain.ResetAngle(gamepad1.circle);
 
                 telemetry.addData("m1",driveTrain.getlbm());
                 telemetry.addData("m2",driveTrain.getlfm());
