@@ -12,21 +12,21 @@ public class teleop extends LinearOpMode {
         @Override
         public void runOpMode() {
             DriveTrain driveTrain = new DriveTrain(hardwareMap, this);
-           // Drawing drawing = new Drawing(hardwareMap,this);
+            Drawing drawing = new Drawing(hardwareMap,this);
             driveTrain.reset();
             waitForStart();
 
             while (opModeIsActive() && !isStopRequested()) {
                 driveTrain.Drive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_trigger - gamepad1.left_trigger);
-
-                if (gamepad2.right_bumper) {
-                   drawing.Power(1);
-                    }
-                else{
-                   drawing.stop();
-               }
-                if (gamepad1.options){
-                driveTrain.ResetAngle();}
+                if (gamepad2.left_bumper){
+                    drawing.intake();
+                }
+                else if (gamepad2.right_bumper){
+                    drawing.outtake();
+                }
+                else {
+                    drawing.stop();
+                }
 
                 telemetry.addData("m1",driveTrain.getlbm());
                 telemetry.addData("m2",driveTrain.getlfm());
@@ -36,7 +36,7 @@ public class teleop extends LinearOpMode {
                 telemetry.update();
 
             }
-            //drawing.stop();
+
         }
     }
 
