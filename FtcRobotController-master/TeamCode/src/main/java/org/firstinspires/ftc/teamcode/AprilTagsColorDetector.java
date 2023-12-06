@@ -46,7 +46,7 @@ public class AprilTagsColorDetector extends LinearOpMode {
                 }
                 telemetry.addLine();
                 telemetry.addLine("----------------------------------------");
-                if (myVisionPortal.getProcessorEnabled(colorDetector)) {
+              ///  if (myVisionPortal.getProcessorEnabled(colorDetector)) {
                     telemetry.addLine("Dpad Down to disable ColorDetector");
                     telemetry.addLine();
                     telemetryColorDetector();
@@ -56,7 +56,7 @@ public class AprilTagsColorDetector extends LinearOpMode {
 
             }
         }
-    }
+   // }
     //Initialize AprilTag and TFOD.
     private void initDoubleVision() {
         // -----------------------------------------------------------------------------------------
@@ -70,8 +70,8 @@ public class AprilTagsColorDetector extends LinearOpMode {
         // TFOD Configuration
         // -----------------------------------------------------------------------------------------
 
-        colorDetector = new Color_Detector()
-                .build();
+        //colorDetector = new Color_Detector()
+              //  .build();
 
         // -----------------------------------------------------------------------------------------
         // Camera Configuration
@@ -80,12 +80,12 @@ public class AprilTagsColorDetector extends LinearOpMode {
         if (USE_WEBCAM) {
             myVisionPortal = new VisionPortal.Builder()
                     .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
-                    .addProcessors(colorDetector, aprilTag)
+                 //   .addProcessors(colorDetector, aprilTag)
                     .build();
         } else {
             myVisionPortal = new VisionPortal.Builder()
                     .setCamera(BuiltinCameraDirection.BACK)
-                    .addProcessors(colorDetector, aprilTag)
+                   // .addProcessors(colorDetector, aprilTag)
                     .build();
         }
     }   // end initDoubleVision()
@@ -109,23 +109,23 @@ private void telemetryAprilTag() {
 
 }   // end method telemetryAprilTag()
     private void telemetryColorDetector() {
-        List<Recognition> currentRecognitions = colorDetector.getLocation();
-        telemetry.addData("# Objects Detected", currentRecognitions.size());
+      //  List<Recognition> currentRecognitions = colorDetector.getLocation();
+      //  telemetry.addData("# Objects Detected", currentRecognitions.size());
 
         // Step through the list of recognitions and display info for each one.
-        for (Recognition recognition : currentRecognitions) {
-            double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
-            double y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
+     //   for (Recognition recognition : currentRecognitions) {
+           /// double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
+          //  double y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
 
-            telemetry.addData(""," ");
-            telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
-            telemetry.addData("- Position", "%.0f / %.0f", x, y);
-            telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
+          //  telemetry.addData(""," ");
+          ///  telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
+          ///  telemetry.addData("- Position", "%.0f / %.0f", x, y);
+          ///  telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
         }   // end for() loop
 
     }   // end method telemetryTfod()
 
-}   // end class
+//}   // end class
 
 
 

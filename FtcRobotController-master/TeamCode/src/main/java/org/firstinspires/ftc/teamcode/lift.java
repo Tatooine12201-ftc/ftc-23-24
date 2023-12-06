@@ -8,13 +8,13 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class lift {
 //ticks per revolution
-    public static double TICKS_PER_REV = 312;
+    public static double TICKS_PER_GOBILDA = 312;
     //gear ratio
     public static double GEAR_RATIO = 53.0/13.0;
     //Puly perimitar
     public static double PULLEY_DIAMETER = 20;
     //Calculate Counts Per MM
-    private final double COUNTS_PER_MM = TICKS_PER_REV * GEAR_RATIO / PULLEY_DIAMETER * Math.PI;
+    private final double COUNTS_PER_MM = TICKS_PER_GOBILDA * GEAR_RATIO / PULLEY_DIAMETER * Math.PI;
     //Lift Levels
     private final int[] levels = {5, 7};
     // Lift Pid force
