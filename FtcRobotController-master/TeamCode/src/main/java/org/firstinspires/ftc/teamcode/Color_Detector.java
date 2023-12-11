@@ -21,16 +21,19 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import java.util.List;
 
-@TeleOp(name = "AprilTagsColorDetectorToo", group = "Detector")
+
 public class Color_Detector extends OpenCvPipeline {
     Telemetry telemetry;
     Mat mat = new Mat();
-    private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
+    private static final boolean USE_WEBCAM = true;  // true for webcam, fal
+
+    // se for phone camera
     //The variable to store our instance of the AprilTag processor.
     private AprilTagProcessor aprilTag;
     //The variable to store our instance of the ColorDetector Object Detection processor.
     private Color_Detector colorDetector;
     //The variable to store our instance of the vision portal.
+    // ??
     private VisionPortal myVisionPortal;
 
     public enum Location {
@@ -133,90 +136,6 @@ public class Color_Detector extends OpenCvPipeline {
 
 
     }
-    public void runOpMode()throws InterruptedException {
-       // initDoubleVision();
-        while (!isStopRequested() ) {
-
-            if (IsActive()) {
-                telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
-                telemetry.addLine();
-                telemetry.addLine("----------------------------------------");
-                if (myVisionPortal.getProcessorEnabled(aprilTag)) {
-                    // User instructions: Dpad left or Dpad right.
-                    telemetry.addLine("Dpad Left to disable AprilTag");
-                    telemetry.addLine();
-                    telemetryAprilTag();
-                } else {
-                    telemetry.addLine("Dpad Right to enable AprilTag");
-                }
-                telemetry.addLine();
-                telemetry.addLine("----------------------------------------");
-                ///  if (myVisionPortal.getProcessorEnabled(colorDetector)) {
-                telemetry.addLine("Dpad Down to disable ColorDetector");
-                telemetry.addLine();
-
-            } else {
-                telemetry.addLine("Dpad Up to enable ColorDetector");
-            }
-
-        }
-    }
-
-    private boolean isStopRequested() {
-        return false;
-    }
-
-    private boolean IsActive (){
-        return true;
-    }
-
-    // }
-    //Initialize AprilTag and TFOD.
-    private void initDoubleVision(HardwareMap hw) {
-        // -----------------------------------------------------------------------------------------
-        // AprilTag Configuration
-        // -----------------------------------------------------------------------------------------
-        aprilTag = new AprilTagProcessor.Builder()
-                .build();
-
-        // -----------------------------------------------------------------------------------------
-        // Camera Configuration
-        // -----------------------------------------------------------------------------------------
-
-        if (USE_WEBCAM) {
-
-            myVisionPortal = new VisionPortal.Builder()
-                    .setCamera(hw.get(WebcamName.class, "Webcam 1"))
-                    //   .addProcessors(colorDetector, aprilTag)
-                    .build();
-        } else {
-            myVisionPortal = new VisionPortal.Builder()
-                    .setCamera(BuiltinCameraDirection.BACK)
-                    // .addProcessors(colorDetector, aprilTag)
-                    .build();
-        }
-    }   // end initDoubleVision()
-    //Add telemetry about AprilTag detections.
-    private void telemetryAprilTag() {
-        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
-        telemetry.addData("# AprilTags Detected", currentDetections.size());
-
-        // Step through the list of detections and display info for each one.
-        for (AprilTagDetection detection : currentDetections) {
-            if (detection.metadata != null) {
-                telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
-                telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
-                telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
-                telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
-            } else {
-                telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
-                telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
-            }
-        }   // end for() loop
-
-    }
-    // end method telemetryAprilTag()
-
 
 
 }

@@ -73,8 +73,8 @@ public class DriveTrain {
 
 
         RFM.setDirection(DcMotorSimple.Direction.REVERSE);
-        RBM.setDirection(DcMotorSimple.Direction.FORWARD);
-        LFM.setDirection(DcMotorSimple.Direction.REVERSE);
+        RBM.setDirection(DcMotorSimple.Direction.REVERSE);
+        LFM.setDirection(DcMotorSimple.Direction.FORWARD);
         LBM.setDirection(DcMotorSimple.Direction.FORWARD);
 
         RFM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

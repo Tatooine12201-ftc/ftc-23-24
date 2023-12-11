@@ -8,7 +8,8 @@ public class Drawing {
     private final LinearOpMode opMode;
     public Drawing(HardwareMap hw, LinearOpMode opMode) {
         this.opMode = opMode;
-        drawing = hw.get(DcMotor.class, "drawing");
+        drawing = hw.get(DcMotor.class, "d" +
+                "rawing");
     }
     public void Power(double power){
         drawing.setPower(power);
