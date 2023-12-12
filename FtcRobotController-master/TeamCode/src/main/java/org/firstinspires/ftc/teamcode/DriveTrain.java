@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -18,6 +19,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import com.qualcomm.robotcore.util.Range;
 
 public class DriveTrain {
+    public static IMU imu ;
     private DcMotor RFM = null;
     private DcMotor RBM = null;
     private DcMotor LFM = null;
@@ -28,7 +30,7 @@ public class DriveTrain {
     private double robotHading_CWP = 0;
     private double robotHading_CCWP = 0;
 
-    private IMU imu = null;
+
     public static double LATERAL_DISTANCE = 334.67; //המרחק בין האינקודר הימני לשמאלי MM?
     public static double FORWARD_OFFSET = 156.75; //המרחק בין האינקודר X לבין ציר הסיבוב (יותר קרוב למאחורה- שלישי, יותר קרוב למקדימה- חיובי) MM?
 
