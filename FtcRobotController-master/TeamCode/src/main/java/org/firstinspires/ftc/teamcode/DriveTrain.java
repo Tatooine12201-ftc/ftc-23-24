@@ -19,6 +19,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import com.qualcomm.robotcore.util.Range;
 
 public class DriveTrain {
+
+
     public static IMU imu ;
     private DcMotor RFM = null;
     private DcMotor RBM = null;
@@ -37,6 +39,7 @@ public class DriveTrain {
     double prevRightEncoderPos = 0;
     double prevLeftEncoderPos = 0;
     double prevCenterEncoderPos = 0;
+
 
     public static double TICKS_PER_GOBILDA = 312;
     public static double GEAR_RATIO = 1;
@@ -87,7 +90,7 @@ public class DriveTrain {
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
         RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
 
-
+        //imu = HardwareMap.get( IMU.class,"imu");
 
 
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.media.FaceDetector;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -7,7 +9,7 @@ import org.firstinspires.ftc.teamcode.DriveTrain;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.hardware.IMU;
 
 
 import org.firstinspires.ftc.teamcode.DriveTrain;
@@ -17,13 +19,23 @@ import org.firstinspires.ftc.teamcode.DriveTrain;
 public class teleop extends LinearOpMode {
         DriveTrain driveTrain;
         Drawing drawing;
+        private double reset;
+        private boolean reseted = false ;
 
         @Override
         public void runOpMode() {
 
 
             //reset the imu (cw is positive)
-            float reset = DriveTrain.imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle;
+           ;
+
+            if (reseted == false){
+                reset = DriveTrain.imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle;
+                reseted = true;
+            }
+
+
+
 
             DriveTrain driveTrain = new DriveTrain(hardwareMap, this);
             Drawing drawing = new Drawing(hardwareMap,this);
