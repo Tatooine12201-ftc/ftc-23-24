@@ -20,7 +20,7 @@ public class teleop extends LinearOpMode {
                 driveTrain.Drive(-gamepad1.left_stick_y, -gamepad1.right_stick_x, gamepad1.right_trigger - gamepad1.left_trigger);
 
                if (gamepad2.right_bumper) {
-                   drawing.Power(1);
+                   drawing.intake();
                     }
                else{
                  drawing.stop();
@@ -28,6 +28,13 @@ public class teleop extends LinearOpMode {
                }
                 if (gamepad1.options){
                 driveTrain.ResetAngle();}
+                driveTrain.Drive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_trigger - gamepad1.left_trigger);
+                if (gamepad2.right_bumper){
+                    drawing.intake();
+                }
+                else {
+                    drawing.stop();
+                }
 
                 telemetry.addData("m1",driveTrain.getlbm());
                 telemetry.addData("m2",driveTrain.getlfm());
@@ -37,7 +44,7 @@ public class teleop extends LinearOpMode {
                 telemetry.update();
 
             }
-            //drawing.stop();
+
         }
     }
 
