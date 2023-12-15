@@ -12,16 +12,17 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 import org.firstinspires.ftc.teamcode.Color_Detector;
 
 import java.util.List;
-//@TeleOp(name = " Double Vision", group = " Vision")
-//public class DoubleVision  extends LinearOpMode{
- //   private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
- //   private AprilTagProcessor aprilTag;
-  //  private VisionPortal myVisionPortal;
- //   private Color_Detector.Location location;
- //   @Override
- //   public void runOpMode() {
-
- //   }
+@TeleOp(name = " Double Vision", group = " Vision")
+ public class DoubleVision  extends LinearOpMode{
+  private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
+   private AprilTagProcessor aprilTag;
+  private VisionPortal myVisionPortal;
+    private Color_Detector.Location location;
+    @Override
+    public void runOpMode() {
 
 
- //   }
+    }
+
+
+    }

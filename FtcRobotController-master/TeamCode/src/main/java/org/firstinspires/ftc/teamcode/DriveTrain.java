@@ -16,11 +16,13 @@ import static java.lang.Math.min;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+
 import com.qualcomm.robotcore.util.Range;
 
 public class DriveTrain {
 
-
+    private double reset;
     public static IMU imu ;
     private DcMotor RFM = null;
     private DcMotor RBM = null;
@@ -61,11 +63,15 @@ public class DriveTrain {
 
     double wantedAngle = 0;
     double NewAngle = 0;
+    IMU.Parameters myIMUparameters ;
+    Orientation myRobotOrientation ;
+
+
 
 
     private final Pid xPid = new Pid(0, 0, 0, 0);
     private final Pid yPid = new Pid(0, 0, 0, 0);
-    private final Pid rPid = new Pid(0, 0, 0, 0);
+    private final Pid rPid = new Pid(0.1001, 0, 0, 0);
 
 
     public DriveTrain(HardwareMap hw, LinearOpMode opMode) {
@@ -93,21 +99,27 @@ public class DriveTrain {
         //imu = HardwareMap.get( IMU.class,"imu");
 
 
-        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
 
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+
+        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
+        myRobotOrientation=imu.getRobotOrientation(AxesReference.INTRINSIC,AxesOrder.XYX ,AngleUnit.RADIANS);
+        float X_axis = myRobotOrientation.firstAngle;
+        float Y_axis = myRobotOrientation.secondAngle;
+        float Z_axis = myRobotOrientation.thirdAngle;
+        myIMUparameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.UP,
                 RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD));
+
         imu = hw.get(IMU.class, "imu");
         imu.initialize(new IMU.Parameters(orientationOnRobot));
-        imu.initialize(parameters);
+        imu.initialize(myIMUparameters);
         reset();
 
         // x
         xPid.setTolerance(0);
         xPid.setIntegrationBounds(0,0);
         //y
-        yPid.setIntegrationBounds(0,0);
+        yPid.setIntegrationBounds(-0.2,0.2);
         yPid.setTolerance(10);
         //R
         rPid.setIntegrationBounds(0,0);
@@ -128,9 +140,13 @@ public class DriveTrain {
         LBM.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         LFM.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        //reset the imu (cw is positive)
-        ResetAngle();
+       reset = DriveTrain.imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle;
 
+
+    }
+
+    public void resetAngle( boolean h) {
+        reset = DriveTrain.imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle;
     }
 
 
@@ -138,15 +154,15 @@ public class DriveTrain {
         while (angle > Math.PI) {
             angle -= TPI;
         }
-        while (angle < -Math.PI) {
-            angle += TPI;
+            while (angle < -Math.PI) {
+                angle += TPI;
         }
         return angle;
     }
 
     public double Heading() {
         //return the heading of the robot (ccw is positive) in radians (0 to 2pi) and make sure that the start R is taken into account
-        robotHading_CWP = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) + startR; //cw is positive
+        robotHading_CWP = DriveTrain.imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle+startR-reset; //cw is positive
         robotHading_CCWP = -robotHading_CWP; //ccw is positive
         return NormalizeAngle(robotHading_CCWP); //normalize the angle to be between -pi and pi
     }
@@ -216,9 +232,7 @@ public class DriveTrain {
     }
 
 
-    public void ResetAngle() {
-        imu.resetYaw();
-    }
+
 
 
 
@@ -235,9 +249,11 @@ public class DriveTrain {
 
     public void Drive(double X, double Y, double RX) {
         double heading  = Heading();
+        double rotX =0 ;
+        double rotY =0;
 
-        double rotX = X * Math.cos(heading) - Y * Math.sin(heading);
-        double rotY = X * Math.sin(heading) + Y * Math.cos(heading);
+         rotX = X * Math.cos(heading) - Y * Math.sin(heading);
+         rotY = X * Math.sin(heading) + Y * Math.cos(heading);
 
         double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(RX), 1);
         double frontLeftPower = (rotY + rotX + RX) / denominator;
@@ -267,23 +283,21 @@ public class DriveTrain {
         double rPower = 0;
         double[] curPos = new double[2];
         double[] dstPos = new double[2];
-        //calculate the error in the position
-        curPos = fieldToRobotConvert(fieldX,fieldY);
-        dstPos = fieldToRobotConvert(x,y);
-        //calculate the power needed to get to the position
-        xPower = xPid.calculate(curPos[0],dstPos[0]);
-        yPower = yPid.calculate(curPos[1],dstPos[1]);
-        rPower = rPid.calculate(Heading(),Math.toRadians(r));
-        //limit the power to 0.7
-        xPower = Range.clip(xPower, 0, 0);
-        yPower = Range.clip(yPower, 0, 0);
-
-
 
         //drive the robot to the position with the calculated power and the robot is field centric
         do{
-        Drive(xPower,yPower, rPower);}
-        while ((!xPid.atSetPoint() || !yPid.atSetPoint()|| !rPid.atSetPoint()) && opMode.opModeIsActive() && !opMode.isStopRequested());//if the robot is at the position (or the op mode is off) then stop the loop//stop the robot
+            //calculate the error in the position
+            curPos = fieldToRobotConvert(fieldX,fieldY);
+            dstPos = fieldToRobotConvert(x,y);
+            //calculate the power needed to get to the position
+            xPower = xPid.calculate(curPos[0],dstPos[0]);
+            yPower = yPid.calculate(curPos[1],dstPos[1]);
+            rPower = rPid.calculate(Heading(),Math.toRadians(r));
+            //limit the power to 0.7
+            xPower = Range.clip(xPower, 0, 0);
+            yPower = Range.clip(yPower, 0, 0);
+            Drive(xPower,yPower, rPower);
+        } while ((!xPid.atSetPoint() || !yPid.atSetPoint()|| !rPid.atSetPoint()) && opMode.opModeIsActive() && !opMode.isStopRequested());//if the robot is at the position (or the op mode is off) then stop the loop//stop the robot
         Drive(0, 0, 0);
         //return true if the robot is at the position
         return true;
