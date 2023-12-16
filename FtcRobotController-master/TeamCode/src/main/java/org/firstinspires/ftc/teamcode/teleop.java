@@ -44,7 +44,7 @@ public class teleop extends LinearOpMode {
 
                }
 
-               driveTrain.resetAngle(gamepad1.options);
+             driveTrain.resetAngle(gamepad1.options);
                //ערך מינימלי של צירים
                 // driveTrain.Drive(0.1,0,0);
                 // driveTrain.Drive(0,0.2,0);

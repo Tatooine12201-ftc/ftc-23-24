@@ -17,6 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 
 import com.qualcomm.robotcore.util.Range;
 
@@ -24,6 +25,8 @@ public class DriveTrain {
 
     private double reset;
     public static IMU imu ;
+
+
     private DcMotor RFM = null;
     private DcMotor RBM = null;
     private DcMotor LFM = null;
@@ -31,7 +34,7 @@ public class DriveTrain {
     private final LinearOpMode opMode;
 
 
-    private double robotHading_CWP = 0;
+   private double robotHading_CWP = 0;
     private double robotHading_CCWP = 0;
 
 
@@ -60,14 +63,8 @@ public class DriveTrain {
     public double startY = 0;
     public double startR = 0;
 
-
     double wantedAngle = 0;
     double NewAngle = 0;
-    IMU.Parameters myIMUparameters ;
-    Orientation myRobotOrientation ;
-
-
-
 
     private final Pid xPid = new Pid(0, 0, 0, 0);
     private final Pid yPid = new Pid(0, 0, 0, 0);
@@ -93,26 +90,12 @@ public class DriveTrain {
         LFM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LBM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
-        RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
-
-        //imu = HardwareMap.get( IMU.class,"imu");
-
-
-
-
-        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
-        myRobotOrientation=imu.getRobotOrientation(AxesReference.INTRINSIC,AxesOrder.XYX ,AngleUnit.RADIANS);
-        float X_axis = myRobotOrientation.firstAngle;
-        float Y_axis = myRobotOrientation.secondAngle;
-        float Z_axis = myRobotOrientation.thirdAngle;
-        myIMUparameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.UP,
                 RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD));
+      
+        imu.initialize(parameters);
 
-        imu = hw.get(IMU.class, "imu");
-        imu.initialize(new IMU.Parameters(orientationOnRobot));
-        imu.initialize(myIMUparameters);
         reset();
 
         // x
@@ -139,14 +122,13 @@ public class DriveTrain {
         RFM.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         LBM.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         LFM.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-       reset = DriveTrain.imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle;
+        imu.resetYaw();
 
 
     }
 
     public void resetAngle( boolean h) {
-        reset = DriveTrain.imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle;
+        imu.resetYaw();
     }
 
 
@@ -161,10 +143,13 @@ public class DriveTrain {
     }
 
     public double Heading() {
+
         //return the heading of the robot (ccw is positive) in radians (0 to 2pi) and make sure that the start R is taken into account
-        robotHading_CWP = DriveTrain.imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS).firstAngle+startR-reset; //cw is positive
-        robotHading_CCWP = -robotHading_CWP; //ccw is positive
-        return NormalizeAngle(robotHading_CCWP); //normalize the angle to be between -pi and pi
+                robotHading_CWP =imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+                robotHading_CCWP = -robotHading_CWP; //ccw is positive
+            return NormalizeAngle(robotHading_CCWP); //normalize the angle to be between -pi and pi
+
+
     }
 
     public double getXlEncoder() {
