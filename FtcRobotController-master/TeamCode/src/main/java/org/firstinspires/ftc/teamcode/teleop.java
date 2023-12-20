@@ -21,7 +21,6 @@ public class teleop extends LinearOpMode {
         Drawing drawing;
 
 
-
         @Override
         public void runOpMode() {
 
@@ -30,8 +29,6 @@ public class teleop extends LinearOpMode {
             driveTrain.setStartPos(0,0,0);
             driveTrain.reset();
             waitForStart();
-
-            driveTrain.driveTo(0,0,90);
 
             while (opModeIsActive() && !isStopRequested()) {
                 driveTrain.Drive(gamepad1.left_stick_x, -gamepad1.right_stick_y, gamepad1.right_trigger - gamepad1.left_trigger);
@@ -46,8 +43,8 @@ public class teleop extends LinearOpMode {
 
              driveTrain.resetAngle(gamepad1.options);
                //ערך מינימלי של צירים
-                // driveTrain.Drive(0.1,0,0);
-                // driveTrain.Drive(0,0.2,0);
+                // driveTrain.Drive(0.15,0,0);
+                 driveTrain.Drive(0.2,0,0);
                 // driveTrain.Drive(0, 0, 0.1);
 
                 telemetry.addData("m1",driveTrain.getlbm());

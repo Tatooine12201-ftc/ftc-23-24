@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name = "ImBadAtThisShit")
 public class OtonomusTest extends LinearOpMode{
+
     DriveTrain driveTrain;
 
     private boolean isRuning() {
@@ -15,13 +16,22 @@ public class OtonomusTest extends LinearOpMode{
     }
 
     ElapsedTime timer = new ElapsedTime();
+
     @Override
     public void runOpMode() {
+        DriveTrain driveTrain = new DriveTrain(hardwareMap, this);
+        driveTrain.setStartPos(0,0,0);
+        driveTrain.reset();
+
+        driveTrain.driveTo(1000, 0, 0, 1000);
+
+
+        /*
         while (timer.seconds() < 10) {
-            driveTrain.driveTo(200.0, 200.0, 90.0);
+            driveTrain.driveTo(200.0, 200.0, 90.0,0);
             if(timer.seconds()> 10){
-                driveTrain.driveTo(10 , 10 , 0);
+                driveTrain.driveTo(10 , 10 , 0,0);
             }
-        }
+        }*/
     }
 }

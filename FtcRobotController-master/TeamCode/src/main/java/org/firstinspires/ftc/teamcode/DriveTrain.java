@@ -19,13 +19,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 public class DriveTrain {
 
-    private double reset;
-    public static IMU imu ;
 
+    public static IMU imu ;
 
     private DcMotor RFM = null;
     private DcMotor RBM = null;
@@ -63,10 +63,15 @@ public class DriveTrain {
     public double startY = 0;
     public double startR = 0;
 
+    public double Time ;
+    double [] errors = new double[2];
+    ElapsedTime time = new ElapsedTime();
+    Boolean Dotimeout =true;
+
     double wantedAngle = 0;
     double NewAngle = 0;
 
-    private final Pid xPid = new Pid(0, 0, 0, 0);
+    private final Pid xPid = new Pid(0.258, 0, 0, 0);
     private final Pid yPid = new Pid(0, 0, 0, 0);
     private final Pid rPid = new Pid(0.1001, 0, 0, 0);
 
@@ -92,7 +97,7 @@ public class DriveTrain {
 
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD));
+                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
       
         imu.initialize(parameters);
 
@@ -102,7 +107,7 @@ public class DriveTrain {
         xPid.setTolerance(0);
         xPid.setIntegrationBounds(0,0);
         //y
-        yPid.setIntegrationBounds(-0.2,0.2);
+        yPid.setIntegrationBounds(-0.2 ,0.2);
         yPid.setTolerance(10);
         //R
         rPid.setIntegrationBounds(0,0);
@@ -131,7 +136,6 @@ public class DriveTrain {
         imu.resetYaw();
     }
 
-
     public double NormalizeAngle(double angle) {
         while (angle > Math.PI) {
             angle -= TPI;
@@ -143,13 +147,10 @@ public class DriveTrain {
     }
 
     public double Heading() {
-
         //return the heading of the robot (ccw is positive) in radians (0 to 2pi) and make sure that the start R is taken into account
                 robotHading_CWP =imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
                 robotHading_CCWP = -robotHading_CWP; //ccw is positive
             return NormalizeAngle(robotHading_CCWP); //normalize the angle to be between -pi and pi
-
-
     }
 
     public double getXlEncoder() {
@@ -216,11 +217,6 @@ public class DriveTrain {
         return pos;
     }
 
-
-
-
-
-
     public void setStartPos(double x, double y, double r) {
         //set the start position
         startX = x;
@@ -231,16 +227,17 @@ public class DriveTrain {
         fieldY = y;
     }
 
-
     public void Drive(double X, double Y, double RX) {
-        double heading  = Heading();
-        double rotX =0 ;
-        double rotY =0;
+        update();
+        double heading = Heading();
+        double rotX = 0;
+        double rotY = 0;
 
-         rotX = X * Math.cos(heading) - Y * Math.sin(heading);
-         rotY = X * Math.sin(heading) + Y * Math.cos(heading);
+        rotX = X * Math.cos(heading) - Y * Math.sin(heading);
+        rotY = X * Math.sin(heading) + Y * Math.cos(heading);
 
         double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(RX), 1);
+
         double frontLeftPower = (rotY + rotX + RX) / denominator;
         double backLeftPower = (rotY - rotX + RX) / denominator;
         double frontRightPower = (rotY - rotX - RX) / denominator;
@@ -251,26 +248,31 @@ public class DriveTrain {
         RFM.setPower(frontRightPower);
         RBM.setPower(backRightPower);
 
-        update();
-
-
-        opMode.telemetry.addData("Power", LBM.getPower());
-        opMode.telemetry.addData("Power", RBM.getPower());
-        opMode.telemetry.addData("Power", RFM.getPower());
-        opMode.telemetry.addData("Power", LFM.getPower());
-
-
+        opMode.telemetry.addData("Power lb", LBM.getPower());
+        opMode.telemetry.addData("Power rb", RBM.getPower());
+        opMode.telemetry.addData("Power rf", RFM.getPower());
+        opMode.telemetry.addData("Power lf", LFM.getPower());
     }
 
-    public boolean driveTo(double x, double y, double r) {
+    public boolean driveTo(double x, double y, double r, double timeOut) {
         double xPower = 0;
         double yPower = 0;
         double rPower = 0;
+        double startTime = time.milliseconds();
         double[] curPos = new double[2];
         double[] dstPos = new double[2];
 
         //drive the robot to the position with the calculated power and the robot is field centric
         do{
+            update();
+            if (time.milliseconds()-startTime>timeOut){
+                // stop the robot
+                Drive(0,0,0);
+                opMode.telemetry.clear();
+                opMode.telemetry.addData("timeOut","timeOut");
+
+                return false;
+            }
             //calculate the error in the position
             curPos = fieldToRobotConvert(fieldX,fieldY);
             dstPos = fieldToRobotConvert(x,y);
@@ -282,8 +284,9 @@ public class DriveTrain {
             xPower = Range.clip(xPower, 0, 0);
             yPower = Range.clip(yPower, 0, 0);
             Drive(xPower,yPower, rPower);
+
         } while ((!xPid.atSetPoint() || !yPid.atSetPoint()|| !rPid.atSetPoint()) && opMode.opModeIsActive() && !opMode.isStopRequested());//if the robot is at the position (or the op mode is off) then stop the loop//stop the robot
-        Drive(0, 0, 0);
+        Drive(xPower, -yPower, rPower);
         //return true if the robot is at the position
         return true;
     }
