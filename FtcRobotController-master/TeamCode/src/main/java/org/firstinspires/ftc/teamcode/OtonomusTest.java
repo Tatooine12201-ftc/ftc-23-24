@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.DriveTrain;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@Autonomous(name = "ImBadAtThisShit")
+@Autonomous(name = "Test")
 public class OtonomusTest extends LinearOpMode{
 
     DriveTrain driveTrain;
@@ -21,9 +21,13 @@ public class OtonomusTest extends LinearOpMode{
     public void runOpMode() {
         DriveTrain driveTrain = new DriveTrain(hardwareMap, this);
         driveTrain.setStartPos(0,0,0);
+        waitForStart();
         driveTrain.reset();
+        while (opModeIsActive() && !isStopRequested()){
+            driveTrain.driveTo(1000, 0, 0, 100000);
+        }
 
-        driveTrain.driveTo(1000, 0, 0, 1000);
+
 
 
         /*
