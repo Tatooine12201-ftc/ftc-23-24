@@ -16,11 +16,14 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.teamcode.DriveTrain;
 
-    @TeleOp(name = "teleop", group = "OpMode")
+ @TeleOp(name = "teleop", group = "OpMode")
     
 public class teleop extends LinearOpMode {
         DriveTrain driveTrain;
         Drawing drawing;
+        Lift lift;
+      //  Arm arm ;
+        //OutTake outTake;
         Gamepad gamepad1Old = new Gamepad();
         Gamepad gamepad2Old = new Gamepad();
 
@@ -30,13 +33,28 @@ public class teleop extends LinearOpMode {
 
             DriveTrain driveTrain = new DriveTrain(hardwareMap, this);
             Drawing drawing = new Drawing(hardwareMap,this);
+            Lift lift =new Lift ( hardwareMap ,this);
+           // OutTake outTake = new OutTake(hardwareMap, this);
+            //Arm arm = new Arm(hardwareMap);
+
             driveTrain.setStartPos(0,0,0);
             driveTrain.reset();
             waitForStart();
 
                 while (opModeIsActive() && !isStopRequested()) {
                     driveTrain.Drive(-gamepad1.right_stick_y,gamepad1.left_stick_x , gamepad1.right_trigger - gamepad1.left_trigger);
-
+                  //  if (gamepad2.right_bumper) {
+                  //      outTake.PutIn();
+                   // }
+                 //   else {
+                   //     outTake.Stop();
+                  //  }
+               //     if (gamepad2.right_bumper) {
+                       // outTake.PutOut();
+                   // }
+                  //  else {
+                    //    outTake.Stop();
+              //      }
                if (gamepad2.right_bumper) {
                    drawing.intake();
                     }
@@ -44,12 +62,18 @@ public class teleop extends LinearOpMode {
                  drawing.stop();
 
                }
+           //    if (gamepad2.a){
+           //        arm.pos();
+               //}
+              // arm.pos();
+                lift.Lift(gamepad2.right_stick_y);
+
                 if (gamepad1.options) {
                     driveTrain.resetAngle();
-                  //  telemetry.addData("reset", true);
-                   // telemetry.update();
                 }
                 driveTrain.update();
+
+
 
 
                //ערך מינימלי של צירים

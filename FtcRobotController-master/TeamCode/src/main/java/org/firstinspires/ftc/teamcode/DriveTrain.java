@@ -1,26 +1,27 @@
-package org.firstinspires.ftc.teamcode;
+
+        package org.firstinspires.ftc.teamcode;
 
 
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.IMU;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
+        import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+        import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+        import com.qualcomm.robotcore.hardware.DcMotor;
+        import com.qualcomm.robotcore.hardware.DcMotorSimple;
+        import com.qualcomm.robotcore.hardware.HardwareMap;
+        import com.qualcomm.robotcore.hardware.IMU;
+        import static java.lang.Math.cos;
+        import static java.lang.Math.sin;
 
-import static java.lang.Math.max;
-import static java.lang.Math.min;
+        import static java.lang.Math.max;
+        import static java.lang.Math.min;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
+        import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+        import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+        import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+        import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+        import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
+        import com.qualcomm.robotcore.util.ElapsedTime;
+        import com.qualcomm.robotcore.util.Range;
 
 public class DriveTrain {
 
@@ -34,7 +35,7 @@ public class DriveTrain {
     private final LinearOpMode opMode;
 
 
-   private double robotHading_CWP = 0;
+    private double robotHading_CWP = 0;
     private double robotHading_CCWP = 0;
 
 
@@ -99,7 +100,7 @@ public class DriveTrain {
                 RevHubOrientationOnRobot.LogoFacingDirection.FORWARD,
                 RevHubOrientationOnRobot.UsbFacingDirection.UP));
 
-      
+
         imu.initialize(parameters);
 
         reset();
@@ -146,7 +147,7 @@ public class DriveTrain {
         }
 
         while (angle < -Math.PI) {
-                angle += TPI;
+            angle += TPI;
         }
         opMode.telemetry.addData("ang",Math.toDegrees(angle));
         return angle;
@@ -154,9 +155,9 @@ public class DriveTrain {
 
     public double Heading() {
         //return the heading of the robot (ccw is positive) in radians (0 to 2pi) and make sure that the start R is taken into account
-                robotHading_CWP = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
-                robotHading_CCWP = -robotHading_CWP; //ccw is positive
-            return NormalizeAngle(robotHading_CCWP); //normalize the angle to be between -pi and pi
+        robotHading_CWP = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        robotHading_CCWP = -robotHading_CWP; //ccw is positive
+        return NormalizeAngle(robotHading_CCWP); //normalize the angle to be between -pi and pi
     }
 
     public double getXlEncoder() {
@@ -318,5 +319,3 @@ public class DriveTrain {
     }
 
 }
-
-

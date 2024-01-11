@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class lift {
+public class Lift {
 //ticks per revolution
     public static double TICKS_PER_GOBILDA = 312;
     //gear ratio
@@ -29,7 +29,7 @@ public class lift {
     private int level = 0;
 
     //lift settings
-    public lift(HardwareMap hw, LinearOpMode opMode) {
+    public Lift(HardwareMap hw, LinearOpMode opMode) {
         this.opMode = opMode;
 
         LiftMotor = hw.get(DcMotorEx.class, "LiftMotor");
@@ -42,7 +42,7 @@ public class lift {
 
         stop();
 
-        pid = new Pid(0, 0, 0, 0);
+        pid = new Pid(0, 0, 0, 0.55555569);
 
         KF = pid.getF();
 
@@ -52,7 +52,7 @@ public class lift {
     }
 
     //setter
-    public lift(DcMotor lift) {
+    public Lift(DcMotor lift) {
         this.LiftMotor = lift;
     }
 
@@ -66,7 +66,7 @@ public class lift {
     }
 
     //stop: set the lift to lvl 0
-    private void stop() {
+         public void stop() {
         LiftMotor.setPower(0);
 
     }
@@ -96,6 +96,12 @@ public class lift {
         LiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LiftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+
+    public void Lift (double power ){
+
+        LiftMotor.setPower(power);
+    }
+
 
 
 }
