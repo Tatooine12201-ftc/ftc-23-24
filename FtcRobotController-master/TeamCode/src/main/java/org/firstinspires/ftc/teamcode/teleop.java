@@ -42,7 +42,7 @@ public class teleop extends LinearOpMode {
             waitForStart();
 
                 while (opModeIsActive() && !isStopRequested()) {
-                    driveTrain.Drive(-gamepad1.right_stick_y,gamepad1.left_stick_x , gamepad1.right_trigger - gamepad1.left_trigger);
+                    driveTrain.Drive(-gamepad1.left_stick_y,gamepad1.right_stick_x, gamepad1.right_trigger - gamepad1.left_trigger);
                   //  if (gamepad2.right_bumper) {
                   //      outTake.PutIn();
                    // }
@@ -77,7 +77,7 @@ public class teleop extends LinearOpMode {
 
 
                //ערך מינימלי של צירים
-                // driveTrain.Drive(0.15,0,0);
+                // driveTrain.Drive(0,0.21,0);
                 // driveTrain.Drive(0, 0, 0.1);
 
 //                telemetry.addData("m1",driveTrain.getlbm());

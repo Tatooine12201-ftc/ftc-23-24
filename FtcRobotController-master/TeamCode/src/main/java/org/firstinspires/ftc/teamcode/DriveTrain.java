@@ -1,27 +1,26 @@
+package org.firstinspires.ftc.teamcode;
 
-        package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 
-        import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-        import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-        import com.qualcomm.robotcore.hardware.DcMotor;
-        import com.qualcomm.robotcore.hardware.DcMotorSimple;
-        import com.qualcomm.robotcore.hardware.HardwareMap;
-        import com.qualcomm.robotcore.hardware.IMU;
-        import static java.lang.Math.cos;
-        import static java.lang.Math.sin;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
-        import static java.lang.Math.max;
-        import static java.lang.Math.min;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 
-        import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-        import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-        import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-        import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-        import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
-
-        import com.qualcomm.robotcore.util.ElapsedTime;
-        import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 public class DriveTrain {
 
@@ -35,12 +34,13 @@ public class DriveTrain {
     private final LinearOpMode opMode;
 
 
-    private double robotHading_CWP = 0;
+   private double robotHading_CWP = 0;
     private double robotHading_CCWP = 0;
 
 
-    public static double LATERAL_DISTANCE = 370.024328; //המרחק בין האינקודר הימני לשמאלי MM?
-    public static double FORWARD_OFFSET = 156.75; //המרחק בין האינקודר X לבין ציר הסיבוב (יותר קרוב למאחורה- שלישי, יותר קרוב למקדימה- חיובי) MM?
+
+    public static double LATERAL_DISTANCE = 373.11; //המרחק בין האינקודר הימני לשמאלי MM?
+    public static double FORWARD_OFFSET = 192.44; //המרחק בין האינקודר X לבין ציר הסיבוב (יותר קרוב למאחורה- שלישי, יותר קרוב למקדימה- חיובי) MM?
 
     double prevRightEncoderPos = 0;
     double prevLeftEncoderPos = 0;
@@ -62,9 +62,9 @@ public class DriveTrain {
 
     public double startX = 0;
     public double startY = 0;
-    public double startR = 0;
 
     public double Time ;
+    public double startR = 0;
     double [] errors = new double[2];
     ElapsedTime time = new ElapsedTime();
     Boolean Dotimeout =true;
@@ -72,7 +72,7 @@ public class DriveTrain {
     double wantedAngle = 0;
     double NewAngle = 0;
 
-    private final Pid xPid = new Pid(1, 0, 0, 0);
+    private final Pid xPid = new Pid(0.00011, 0, 0, 0);
     private final Pid yPid = new Pid(0, 0, 0, 0);
     private final Pid rPid = new Pid(0, 0, 0, 0);
 
@@ -91,26 +91,30 @@ public class DriveTrain {
         LFM.setDirection(DcMotorSimple.Direction.FORWARD);
         LBM.setDirection(DcMotorSimple.Direction.FORWARD);
 
+
         RFM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RBM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LFM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LBM.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.FORWARD,
-                RevHubOrientationOnRobot.UsbFacingDirection.UP));
+                RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                RevHubOrientationOnRobot.UsbFacingDirection.RIGHT));
+        //prv logo right
+        //prv usb up
 
 
+      
         imu.initialize(parameters);
 
         reset();
 
         // x
         xPid.setTolerance(0);
-        xPid.setIntegrationBounds(-0.2,0.2);
+        xPid.setIntegrationBounds(-0.21,0.21);
         //y
-        yPid.setIntegrationBounds(0 ,0);
-        yPid.setTolerance(10);
+        yPid.setIntegrationBounds(-0.13 ,0.13);
+        yPid.setTolerance(0);
         //R
         rPid.setIntegrationBounds(0,0);
         rPid.setTolerance(Math.toRadians(0));
@@ -147,7 +151,7 @@ public class DriveTrain {
         }
 
         while (angle < -Math.PI) {
-            angle += TPI;
+                angle += TPI;
         }
         opMode.telemetry.addData("ang",Math.toDegrees(angle));
         return angle;
@@ -155,9 +159,9 @@ public class DriveTrain {
 
     public double Heading() {
         //return the heading of the robot (ccw is positive) in radians (0 to 2pi) and make sure that the start R is taken into account
-        robotHading_CWP = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
-        robotHading_CCWP = -robotHading_CWP; //ccw is positive
-        return NormalizeAngle(robotHading_CCWP); //normalize the angle to be between -pi and pi
+                robotHading_CWP = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+                robotHading_CCWP = -robotHading_CWP; //ccw is positive
+            return NormalizeAngle(robotHading_CCWP); //normalize the angle to be between -pi and pi
     }
 
     public double getXlEncoder() {
@@ -183,12 +187,13 @@ public class DriveTrain {
 
     public void update() {
         //save the Encoder position
+
         double leftEncoderPos = getXlEncoder();
         double rightEncoderPos = - getXrEncoder();
         double centerEncoderPos = getYEncoder();
-        //opMode.telemetry.addData("left X", leftEncoderPos);
-        //opMode.telemetry.addData("right X", rightEncoderPos);
-        //opMode.telemetry.addData("Y", centerEncoderPos);
+        opMode.telemetry.addData("left X", leftEncoderPos);
+        opMode.telemetry.addData("right X", rightEncoderPos);
+        opMode.telemetry.addData("Y", centerEncoderPos);
 
         //calculate the change in encoder position from the previous iteration of the loop
         double deltaLeftEncoderPos = leftEncoderPos - prevLeftEncoderPos;
@@ -241,14 +246,14 @@ public class DriveTrain {
         fieldY = y;
     }
 
-    public void Drive(double X, double Y, double RX) {
+    public void Drive(double Y, double X, double RX) {
         update();
         double heading = Heading();
         double rotX = 0;
         double rotY = 0;
+        rotX = -X * Math.cos(heading) + Y * Math.sin(heading);
+        rotY =- X * Math.sin(heading) - Y * Math.cos(heading);
 
-        rotX = X * Math.sin(heading) + Y * Math.cos(heading);
-        rotY = X * Math.cos(heading) - Y * Math.sin(heading);
         double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(RX), 1);
 
         double frontLeftPower = (rotX + rotY + RX) / denominator;
@@ -319,3 +324,5 @@ public class DriveTrain {
     }
 
 }
+
+
