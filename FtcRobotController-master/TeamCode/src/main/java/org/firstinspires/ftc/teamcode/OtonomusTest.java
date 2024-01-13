@@ -23,8 +23,11 @@ public class OtonomusTest extends LinearOpMode{
         driveTrain.setStartPos(0,0,0);
         waitForStart();
         driveTrain.reset();
-        while (opModeIsActive() && !isStopRequested()){
-            driveTrain.driveTo(1000, 0, 0, 1000);
+
+       // driveTrain.driveTo(1000, 1000, 90, 100000);
+        driveTrain.driveTo(1000, 1000, 90, 100000);
+        sleep(1000);
+        driveTrain.driveTo(0, 0, 0, 100000);
             //.driveTo(0, 1000, 0, 10000);
         }
 
@@ -38,5 +41,5 @@ public class OtonomusTest extends LinearOpMode{
                 driveTrain.driveTo(10 , 10 , 0,0);
             }
         }*/
-    }
+
 }

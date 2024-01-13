@@ -72,9 +72,9 @@ public class DriveTrain {
     double wantedAngle = 0;
     double NewAngle = 0;
 
-    private final Pid xPid = new Pid(0.00011, 0, 0, 0);
-    private final Pid yPid = new Pid(0, 0, 0, 0);
-    private final Pid rPid = new Pid(0, 0, 0, 0);
+    private final Pid xPid = new Pid(0.01, 0, 0.0015, 0);
+    private final Pid yPid = new Pid(0.01, 0, 0.0015, 0);
+    private final Pid rPid = new Pid(0.75, 0, 0, 0);
 
 
     public DriveTrain(HardwareMap hw, LinearOpMode opMode) {
@@ -110,14 +110,14 @@ public class DriveTrain {
         reset();
 
         // x
-        xPid.setTolerance(0);
+        xPid.setTolerance(10);
         xPid.setIntegrationBounds(-0.21,0.21);
         //y
         yPid.setIntegrationBounds(-0.13 ,0.13);
-        yPid.setTolerance(0);
+        yPid.setTolerance(10);
         //R
         rPid.setIntegrationBounds(0,0);
-        rPid.setTolerance(Math.toRadians(0));
+        rPid.setTolerance(Math.toRadians(2));
 
 
 
@@ -173,7 +173,7 @@ public class DriveTrain {
     }
 
     public double getYEncoder() {
-        return LFM.getCurrentPosition();
+        return -LFM.getCurrentPosition();
     }
     public double getFieldX() {
         return fieldX;
@@ -189,7 +189,7 @@ public class DriveTrain {
         //save the Encoder position
 
         double leftEncoderPos = getXlEncoder();
-        double rightEncoderPos = - getXrEncoder();
+        double rightEncoderPos = getXrEncoder();
         double centerEncoderPos = getYEncoder();
         opMode.telemetry.addData("left X", leftEncoderPos);
         opMode.telemetry.addData("right X", rightEncoderPos);
@@ -213,8 +213,8 @@ public class DriveTrain {
         //update the field position of the robot
         fieldX += ticksToMM(deltaX);
         fieldY += ticksToMM(deltaY);
-        opMode.telemetry.addData("X", fieldX);
-        opMode.telemetry.addData("Y", fieldY);
+        opMode.telemetry.addData("fieldX", fieldX);
+        opMode.telemetry.addData("fieldY", fieldY);
 
 
         //save the encoder position for the next iteration of the loop
@@ -249,14 +249,14 @@ public class DriveTrain {
     public void Drive(double Y, double X, double RX) {
         update();
         double heading = Heading();
-        double rotX = 0;
-        double rotY = 0;
-        rotX = -X * Math.cos(heading) + Y * Math.sin(heading);
-        rotY =- X * Math.sin(heading) - Y * Math.cos(heading);
+        double rotX = X * Math.sin(heading) + Y * Math.cos(heading);
+        double rotY = X * Math.cos(heading) - Y * Math.sin(heading);
+
 
         double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(RX), 1);
 
-        double frontLeftPower = (rotX + rotY + RX) / denominator;
+
+          double frontLeftPower = (rotX + rotY + RX) / denominator;
         double backLeftPower = (rotX - rotY + RX) / denominator;
         double frontRightPower = (rotX - rotY - RX) / denominator;
         double backRightPower = (rotX + rotY - RX) / denominator;
@@ -296,12 +296,17 @@ public class DriveTrain {
             yPower = yPid.calculate(fieldY,y);
             rPower = rPid.calculate(Heading(),Math.toRadians(r));
             //limit the power to 0.7
+            opMode.telemetry.addData("err X",x-fieldX);
+            opMode.telemetry.addData("err Y",y-fieldY);
+            opMode.telemetry.addData("err RX",r- Math.toDegrees(Heading()));
+            opMode.telemetry.update();
             xPower = Range.clip(xPower, -1, 1);
             yPower = Range.clip(yPower, -1, 1);
-            Drive(-yPower,xPower, rPower);
+            Drive(xPower,yPower*1.15, rPower);
 
         } while ((!xPid.atSetPoint() || !yPid.atSetPoint()|| !rPid.atSetPoint()) && opMode.opModeIsActive() && !opMode.isStopRequested());//if the robot is at the position (or the op mode is off) then stop the loop//stop the robot
         Drive(0, 0, 0);
+        opMode.sleep(100);
         //return true if the robot is at the position
         return true;
     }
