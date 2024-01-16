@@ -16,15 +16,15 @@ public class OutTake {
     private final LinearOpMode opMode;
     public OutTake (HardwareMap hw, LinearOpMode opMode) {
         this.opMode = opMode;
-        OTS = hw.get(Servo.class, "outTake");
+        OTS = hw.get(Servo.class, "Prika");
+        OTS.setDirection(Servo.Direction.FORWARD);
     }
 
-    public void PutOut(){
+    public void PutOut2(){
        OTS.setPosition(1);
     }
-    public void PutIn() {
-        OTS.setPosition(-1);
-    }
+    public void PutIn() {OTS.setPosition(-1);}
+    public void PutOut1() {OTS.setPosition(0.5);}
  public void Stop(){
         OTS.setPosition(0);
     }

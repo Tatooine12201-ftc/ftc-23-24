@@ -22,8 +22,9 @@ public class teleop extends LinearOpMode {
         DriveTrain driveTrain;
         Drawing drawing;
         Lift lift;
-      //  Arm arm ;
-        //OutTake outTake;
+        Arm arm ;
+        OutTake outTake;
+
         Gamepad gamepad1Old = new Gamepad();
         Gamepad gamepad2Old = new Gamepad();
 
@@ -34,8 +35,10 @@ public class teleop extends LinearOpMode {
             DriveTrain driveTrain = new DriveTrain(hardwareMap, this);
             Drawing drawing = new Drawing(hardwareMap,this);
             Lift lift =new Lift ( hardwareMap ,this);
-           // OutTake outTake = new OutTake(hardwareMap, this);
-            //Arm arm = new Arm(hardwareMap);
+            OutTake outtake = new OutTake(hardwareMap, this);
+            Arm arm = new Arm(hardwareMap,this);
+            arm.pos();
+
 
             driveTrain.setStartPos(0,0,0);
             driveTrain.reset();
@@ -43,49 +46,38 @@ public class teleop extends LinearOpMode {
 
                 while (opModeIsActive() && !isStopRequested()) {
                     driveTrain.Drive(-gamepad1.left_stick_y,gamepad1.left_stick_x, gamepad1.right_trigger - gamepad1.left_trigger);
-                  //  if (gamepad2.right_bumper) {
-                  //      outTake.PutIn();
-                   // }
-                 //   else {
-                   //     outTake.Stop();
-                  //  }
-               //     if (gamepad2.right_bumper) {
-                       // outTake.PutOut();
-                   // }
-                  //  else {
-                    //    outTake.Stop();
-              //      }
+
+                   if (gamepad2.right_bumper) {
+                        outtake.PutOut1();
+                    }
+                    else if ( gamepad2.left_bumper){
+                        outtake.PutIn();
+                    }
+                     else {
+                       outtake.Stop();
+                    }
                if (gamepad2.right_bumper) {
                    drawing.intake();
                     }
+
                else{
                  drawing.stop();
 
                }
-           //    if (gamepad2.a){
-           //        arm.pos();
-               //}
-              // arm.pos();
+
+                if (gamepad2.a){
+                    arm.pos();
+                }
+
+                if (gamepad2.b){
+                    arm.posStart();
+                }
                 lift.Lift(gamepad2.right_stick_y);
 
                 if (gamepad1.options) {
                     driveTrain.resetAngle();
                 }
                 driveTrain.update();
-
-
-
-
-               //ערך מינימלי של צירים
-                // driveTrain.Drive(0,0.21,0);
-                // driveTrain.Drive(0, 0, 0.1);
-
-//                telemetry.addData("m1",driveTrain.getlbm());
-//                telemetry.addData("m2",driveTrain.getlfm());
-//                telemetry.addData("m3",driveTrain.getrbm());
-//                telemetry.addData("m4",driveTrain.getrfm());
-                //
-                // telemetry.addData("heading",Math.toDegrees(driveTrain.Heading()));
 
                 gamepad1Old = gamepad1;
                 gamepad2Old = gamepad2;
