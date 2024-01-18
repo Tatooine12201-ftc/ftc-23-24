@@ -10,15 +10,20 @@ import org.opencv.core.Mat;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.firstinspires.ftc.teamcode.AprilTags;
 import org.openftc.easyopencv.OpenCvPipeline;
 //import org.firstinspires.ftc.teamcode.Basic.AprilTagCamera.AprilTagDetectionPipeline;
 import org.openftc.apriltag.AprilTagDetection;
-
+import org.firstinspires.ftc.teamcode.AprilTags.ConceptAprilTag;
     @Autonomous(name = "Autonomous", group = "OpMode")
 public class Camera extends LinearOpMode {
     OpenCvCamera camera;
+        private  boolean GetPipline =true ;
+        private AprilTags.ConceptAprilTag;
 
-    private boolean isRuning() {
+
+
+        private boolean isRuning() {
         return opModeIsActive() && !isStopRequested();
     }
 
@@ -29,8 +34,11 @@ public class Camera extends LinearOpMode {
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
         Color_Detector detector = new Color_Detector (telemetry);
+        AprilTags aprilTag =  new AprilTags ();
 
         camera.setPipeline(detector);
+
+
 
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
@@ -44,6 +52,18 @@ public class Camera extends LinearOpMode {
         });
 
         waitForStart();
+        while (opModeIsActive() && !isStopRequested()) {
+            if (GetPipline) {
+                telemetry.addData("apriltag", AprilTags.ConceptAprilTag);
+                GetPipline = false;
+            }
+            else {
+                camera.setPipeline(detector);
+                telemetry.addData("detector",detector);
+            }
+            telemetry.update();
+
+        }
     }
 
 }

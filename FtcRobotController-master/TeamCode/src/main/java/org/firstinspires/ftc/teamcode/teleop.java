@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import android.media.FaceDetector;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -24,6 +25,7 @@ public class teleop extends LinearOpMode {
         Lift lift;
         Arm arm ;
         OutTake outTake;
+        private boolean isbussy;
 
         Gamepad gamepad1Old = new Gamepad();
         Gamepad gamepad2Old = new Gamepad();
@@ -48,22 +50,23 @@ public class teleop extends LinearOpMode {
                     driveTrain.Drive(-gamepad1.left_stick_y,gamepad1.left_stick_x, gamepad1.right_trigger - gamepad1.left_trigger);
 
                    if (gamepad2.right_bumper) {
-                        outtake.PutOut1();
-                    }
-                    else if ( gamepad2.left_bumper){
-                        outtake.PutIn();
-                    }
+                       drawing.inTake();
+                      // isbussy = true;
+                    } else if  ( gamepad2.left_bumper){
+                       outtake.PutOut1();
+                   }
+
                      else {
                        outtake.Stop();
-                    }
-               if (gamepad2.right_bumper) {
-                   drawing.intake();
+                       drawing.stop();
+
+
+
+
                     }
 
-               else{
-                 drawing.stop();
 
-               }
+
 
                 if (gamepad2.a){
                     arm.pos();

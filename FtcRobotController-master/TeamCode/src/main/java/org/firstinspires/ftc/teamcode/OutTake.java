@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-@Disabled
+
 public class OutTake {
     private Servo OTS = null;
     private final LinearOpMode opMode;
@@ -25,6 +25,7 @@ public class OutTake {
     }
     public void PutIn() {OTS.setPosition(-1);}
     public void PutOut1() {OTS.setPosition(0.5);}
+
  public void Stop(){
         OTS.setPosition(0);
     }
