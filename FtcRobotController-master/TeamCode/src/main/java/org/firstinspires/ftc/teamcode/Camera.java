@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -15,11 +16,12 @@ import org.openftc.easyopencv.OpenCvPipeline;
 //import org.firstinspires.ftc.teamcode.Basic.AprilTagCamera.AprilTagDetectionPipeline;
 import org.openftc.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.teamcode.AprilTags.ConceptAprilTag;
+@Disabled
     @Autonomous(name = "Autonomous", group = "OpMode")
 public class Camera extends LinearOpMode {
     OpenCvCamera camera;
         private  boolean GetPipline =true ;
-        private AprilTags.ConceptAprilTag;
+
 
 
 
@@ -33,10 +35,10 @@ public class Camera extends LinearOpMode {
 
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        Color_Detector detector = new Color_Detector (telemetry);
-        AprilTags aprilTag =  new AprilTags ();
+       // ColorDetector detector = new ColorDetector (telemetry);
+        //AprilTags aprilTag =  new AprilTags ();
 
-        camera.setPipeline(detector);
+       // camera.setPipeline(detector);
 
 
 
@@ -54,12 +56,12 @@ public class Camera extends LinearOpMode {
         waitForStart();
         while (opModeIsActive() && !isStopRequested()) {
             if (GetPipline) {
-                telemetry.addData("apriltag", AprilTags.ConceptAprilTag);
+          //      telemetry.addData("apriltag", AprilTags.ConceptAprilTag);
                 GetPipline = false;
             }
             else {
-                camera.setPipeline(detector);
-                telemetry.addData("detector",detector);
+              //  camera.setPipeline(detector);
+              //  telemetry.addData("detector",detector);
             }
             telemetry.update();
 

@@ -51,6 +51,7 @@ public class teleop extends LinearOpMode {
 
                    if (gamepad2.right_bumper) {
                        drawing.inTake();
+                       outtake.PutIn();
                       // isbussy = true;
                     } else if  ( gamepad2.left_bumper){
                        outtake.PutOut1();
