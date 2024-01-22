@@ -40,6 +40,8 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
+import org.firstinspires.ftc.teamcode.ColorDetector;
+import org.opencv.core.Core;
 
 import java.util.List;
 
@@ -64,8 +66,10 @@ public class DoubleVision  extends LinearOpMode {
      * The variable to store our instance of the TensorFlow Object Detection processor.
      */
     private ColorDetector detector;
-    private ColorDetector.Location location;
-    List<Recognition>contours;
+   // private ColorDetector.Location location;
+    //List<ColorDetector>contours;
+    ColorDetector recognition;
+
 
     /**
      * The variable to store our instance of the vision portal.
@@ -134,16 +138,13 @@ public class DoubleVision  extends LinearOpMode {
         // AprilTag Configuration
         // -----------------------------------------------------------------------------------------
 
-        aprilTag = new AprilTagProcessor.Builder()
-                .build();
+        aprilTag = new AprilTagProcessor.Builder().build();
 
         // -----------------------------------------------------------------------------------------
         // TFOD Configuration
         // -----------------------------------------------------------------------------------------
 
-        //ch
-        //detector = location. ()
-              //  .build();
+     //  detector.
 
         // -----------------------------------------------------------------------------------------
         // Camera Configuration
@@ -188,20 +189,19 @@ public class DoubleVision  extends LinearOpMode {
      * Add telemetry about TensorFlow Object Detection (TFOD) recognitions.
      */
     private void telemetryLocation() {
-        List<Recognition> currentRecognitions = contours;
-        telemetry.addData("# Objects Detected", currentRecognitions.size());
+       // List<ColorDetector> currentRecognitions = contours;
+       // telemetry.addData("# Objects Detected", currentRecognitions.);
 
         // Step through the list of recognitions and display info for each one.
-        for (Recognition recognition : currentRecognitions) {
-            double x = (recognition.getLeft() + recognition.getRight()) / 2 ;
-            double y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
+       // for (ColorDetector recognition : currentRecognitions) {
+            if(recognition.getLocation() != null) {
+              telemetry.addData("location",recognition.getLocation());
+            }
 
-            telemetry.addData(""," ");
-            telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
-            telemetry.addData("- Position", "%.0f / %.0f", x, y);
-            telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
+
+
         }   // end for() loop
 
     }   // end method telemetryTfod()
 
-}   // end class
+//}   // end class
