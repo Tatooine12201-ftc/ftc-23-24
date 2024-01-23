@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.DriveTrain;
 public class teleop extends LinearOpMode {
         DriveTrain driveTrain;
         Drawing drawing;
-        Lift lift;
+      //  Lift lift;
         Arm arm ;
         OutTake outTake;
         private boolean isbussy;
@@ -39,6 +39,7 @@ public class teleop extends LinearOpMode {
             Lift lift =new Lift ( hardwareMap ,this);
             OutTake outtake = new OutTake(hardwareMap, this);
             Arm arm = new Arm(hardwareMap,this);
+
             arm.pos();
 
 
@@ -52,7 +53,7 @@ public class teleop extends LinearOpMode {
                    if (gamepad2.right_bumper) {
                        drawing.inTake();
                        outtake.PutIn();
-                      // isbussy = true;
+
                     } else if  ( gamepad2.left_bumper){
                        outtake.PutOut1();
                    }
@@ -67,16 +68,15 @@ public class teleop extends LinearOpMode {
                     }
 
 
-
-
-                if (gamepad2.a){
+                if (gamepad2.cross){
                     arm.pos();
                 }
-
-                if (gamepad2.b){
-                    arm.posStart();
+                else {
+                    arm.stop();
                 }
-                lift.Lift(gamepad2.right_stick_y);
+
+
+               lift.lift(gamepad2.right_stick_y);
 
                 if (gamepad1.options) {
                     driveTrain.resetAngle();

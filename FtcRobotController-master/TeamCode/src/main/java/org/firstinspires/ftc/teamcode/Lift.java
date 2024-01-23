@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.annotation.SuppressLint;
+
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -21,6 +24,8 @@ public class Lift {
     private double KF = 0;
     // Lift Motor
     private DcMotor LiftMotor = null;
+
+    private DcMotor LiftMotortow;
     //Lift PID
     private Pid pid;
     //Lift opMode
@@ -33,10 +38,12 @@ public class Lift {
         this.opMode = opMode;
 
         LiftMotor = hw.get(DcMotorEx.class, "LiftMotor");
+        //LiftMotortow =hw.get(DcMotorEx.class, "LiftMotortow");
 
         LiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
+       // LiftMotortow.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LiftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+       // LiftMotortow.setDirection(DcMotorSimple.Direction.FORWARD);
 
         resetEncoders();
 
@@ -52,8 +59,9 @@ public class Lift {
     }
 
     //setter
-    public Lift(DcMotor lift) {
+    public Lift(DcMotor lift, DcMotor lifttwo) {
         this.LiftMotor = lift;
+      //  this.LiftMotortow = lift;
     }
 
     //ticks to MM and MM to ticks
@@ -68,6 +76,7 @@ public class Lift {
     //stop: set the lift to lvl 0
          public void stop() {
         LiftMotor.setPower(0);
+       // LiftMotortow.setPower(0);
 
     }
 // get lift lvl and return lift lvl
@@ -85,6 +94,7 @@ public class Lift {
     //get Encoders ticks
     public int getEncoder() {
         return LiftMotor.getCurrentPosition();
+
     }
 
     //reset encoders ticks
@@ -95,9 +105,12 @@ public class Lift {
     public void resetEncoders() {
         LiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         LiftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+       // LiftMotortow.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       // LiftMotortow.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public void Lift (double power ){
+
+    public void lift (double power ){
 
         LiftMotor.setPower(power);
     }

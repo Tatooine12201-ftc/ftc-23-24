@@ -42,6 +42,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 import org.firstinspires.ftc.teamcode.ColorDetector;
 import org.opencv.core.Core;
+import org.opencv.core.Mat;
 
 import java.util.List;
 
@@ -66,9 +67,12 @@ public class DoubleVision  extends LinearOpMode {
      * The variable to store our instance of the TensorFlow Object Detection processor.
      */
     private ColorDetector detector;
-   // private ColorDetector.Location location;
-    //List<ColorDetector>contours;
+
     ColorDetector recognition;
+
+    private Mat mat;
+
+
 
 
     /**
@@ -144,8 +148,7 @@ public class DoubleVision  extends LinearOpMode {
         // TFOD Configuration
         // -----------------------------------------------------------------------------------------
 
-     //  detector.
-
+        detector.processFrame(mat.t());
         // -----------------------------------------------------------------------------------------
         // Camera Configuration
         // -----------------------------------------------------------------------------------------
