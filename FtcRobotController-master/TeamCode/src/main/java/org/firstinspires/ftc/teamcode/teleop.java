@@ -66,10 +66,15 @@ public class teleop extends LinearOpMode {
 
 
                     }
+                     if(gamepad2.circle){
+                         drawing.outtake();
+                     }
 
 
-                if (gamepad2.cross){
+
+                if (gamepad2.cross) {
                     arm.pos();
+
                 }
                 else {
                     arm.stop();

@@ -20,9 +20,9 @@ public class Arm {
          Arm = hw.get(Servo.class ,"Arm");
          ArmTwo = hw.get(Servo.class, "ArnTwo");
 
-        Arm .setDirection(Servo.Direction.FORWARD);
+        Arm .setDirection(Servo.Direction.REVERSE);
       //  Arm.setPosition(1);
-        ArmTwo.setDirection(Servo.Direction.REVERSE);
+        ArmTwo.setDirection(Servo.Direction.FORWARD);
       //  ArmTwo.setPosition(1);
    }
 
