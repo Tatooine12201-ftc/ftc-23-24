@@ -3,10 +3,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import org.firstinspires.ftc.teamcode.OutTake;
 
 public class Drawing {
     private DcMotor drawing = null;
+
     private final LinearOpMode opMode;
 
 
@@ -28,7 +30,7 @@ public class Drawing {
     }
     public void outtake() {
 
-        drawing.setPower(-1);
+        drawing.setPower(-0.3);
     }
 
 }

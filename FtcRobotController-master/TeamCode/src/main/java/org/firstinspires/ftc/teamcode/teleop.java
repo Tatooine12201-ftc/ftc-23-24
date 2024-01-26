@@ -40,7 +40,7 @@ public class teleop extends LinearOpMode {
             OutTake outtake = new OutTake(hardwareMap, this);
             Arm arm = new Arm(hardwareMap,this);
 
-            arm.pos();
+            //arm.pos();
 
 
             driveTrain.setStartPos(0,0,0);

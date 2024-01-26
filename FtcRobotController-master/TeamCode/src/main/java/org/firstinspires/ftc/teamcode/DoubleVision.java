@@ -158,13 +158,8 @@ public class DoubleVision  extends LinearOpMode {
                     .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
                     .addProcessors(detector, aprilTag)
                     .build();
-        } else {
-            myVisionPortal = new VisionPortal.Builder()
-                    .setCamera(BuiltinCameraDirection.BACK)
-                    .addProcessors(detector, aprilTag)
-                    .build();
+        };
         }
-    }   // end initDoubleVision()
 
     /**
      * Add telemetry about AprilTag detections.
@@ -199,6 +194,7 @@ public class DoubleVision  extends LinearOpMode {
        // for (ColorDetector recognition : currentRecognitions) {
             if(recognition.getLocation() != null) {
               telemetry.addData("location",recognition.getLocation());
+              telemetry.update();
             }
 
 
