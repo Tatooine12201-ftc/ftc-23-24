@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
-
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 @Autonomous(name = "BlueClose")
 public class BlueClose extends LinearOpMode{
@@ -12,6 +12,8 @@ public class BlueClose extends LinearOpMode{
     DriveTrain driveTrain;
     ColorDetector colorDetector;
     Drawing drawing;
+    OutTake
+    touch = hardwareMap.get(OutTake.class, "touch_sensor");
 
 
     ElapsedTime timer = new ElapsedTime();

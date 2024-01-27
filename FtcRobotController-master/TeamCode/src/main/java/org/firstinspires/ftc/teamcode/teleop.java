@@ -11,8 +11,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 
 import org.firstinspires.ftc.teamcode.DriveTrain;
@@ -25,8 +27,9 @@ public class teleop extends LinearOpMode {
       //  Lift lift;
         Arm arm ;
         OutTake outTake;
-        private boolean isbussy;
-
+        AnalogInput analogInput;
+        private boolean isbussy = true;
+        TouchSensor touch;
         Gamepad gamepad1Old = new Gamepad();
         Gamepad gamepad2Old = new Gamepad();
 
@@ -39,15 +42,22 @@ public class teleop extends LinearOpMode {
             Lift lift =new Lift ( hardwareMap ,this);
             OutTake outtake = new OutTake(hardwareMap, this);
             Arm arm = new Arm(hardwareMap,this);
-
+            AnalogInput analogInput = hardwareMap.get(AnalogInput.class, "myanaloginput");
             //arm.pos();
+
+
 
 
             driveTrain.setStartPos(0,0,0);
             driveTrain.reset();
+            telemetry.addData("Mode", "waiting");
+            telemetry.update();
             waitForStart();
+            telemetry.addData("Mode", "waiting");
+            telemetry.update();
 
-                while (opModeIsActive() && !isStopRequested()) {
+
+            while (opModeIsActive() && !isStopRequested()) {
                     driveTrain.Drive(-gamepad1.left_stick_y,gamepad1.left_stick_x, gamepad1.right_trigger - gamepad1.left_trigger);
 
                    if (gamepad2.right_bumper) {
@@ -61,8 +71,7 @@ public class teleop extends LinearOpMode {
                      else {
                        outtake.Stop();
                        drawing.stop();
-
-
+                    // עולה מספר טיקיים לפי לחיצת כפתור , מעלית + זרוע ביחד
 
 
                     }
@@ -77,11 +86,24 @@ public class teleop extends LinearOpMode {
 
                 }
                 else {
-                    arm.stop();
+                    arm.stosStart();
+                }
+                if (gamepad2.square && isbussy) {
+                    arm.stosStart();
+                    isbussy = false;
+                }
+                boolean is_in=true;
+                    if (!isbussy && arm.getpos()==0){
+                        lift.setpos();
+                    }
+
+                if (gamepad2.dpad_up) {
+                    lift.LiftByTicks();
                 }
 
 
-               lift.lift(gamepad2.right_stick_y);
+
+                    lift.lift(gamepad2.right_stick_y);
 
                 if (gamepad1.options) {
                     driveTrain.resetAngle();

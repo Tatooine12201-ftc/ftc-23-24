@@ -29,9 +29,11 @@ public class Lift {
     //Lift PID
     private Pid pid;
     //Lift opMode
+    private double PlusPower = 0;
     private LinearOpMode opMode;
     //Lift level 0
     private int level = 0;
+    private int pos =0;
 
     //lift settings
     public Lift(HardwareMap hw, LinearOpMode opMode) {
@@ -108,13 +110,21 @@ public class Lift {
        // LiftMotortow.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
        // LiftMotortow.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+   // public void lift0(){
+      //  double Power1 =LiftMotor.getPower();
+     //   LiftMotor.setPower(-Power1);
+  //  }
 
-
+    public void setpos(){
+        LiftMotor.setTargetPosition(0);
+    }
     public void lift (double power ){
 
         LiftMotor.setPower(power);
     }
-
+    public void LiftByTicks(){
+          LiftMotor.setTargetPosition(LiftMotor.getCurrentPosition()+1);
+    }
 
 
 }

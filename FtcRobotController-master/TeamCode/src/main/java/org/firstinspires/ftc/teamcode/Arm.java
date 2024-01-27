@@ -12,6 +12,7 @@ public class Arm {
      private Servo Arm =null;
      private Servo ArmTwo = null;
      private final LinearOpMode opMode;
+     AnalogInput analogInput;
 
    public Arm (HardwareMap hw,LinearOpMode opMode)
    {
@@ -24,6 +25,12 @@ public class Arm {
       //  Arm.setPosition(1);
         ArmTwo.setDirection(Servo.Direction.FORWARD);
       //  ArmTwo.setPosition(1);
+       //get our analog input from the hardwareMap
+
+// get the voltage of our analog line
+// divide by 3.3 (the max voltage) to get a value between 0 and 1
+// multiply by 360 to convert it to 0 to 360 degrees
+       double position = analogInput.getVoltage() / 3.3 * 360;
    }
 
   // public double posAnalog()
@@ -31,6 +38,11 @@ public class Arm {
       // double position = arm.getVoltage() / 3.3 * 360;
       // return position;
   // }
+    public double getpos(){
+      return Arm.getPosition();
+
+    }
+
 
    public void pos()
    {
@@ -38,9 +50,18 @@ public class Arm {
        ArmTwo.setPosition(0.7);
    }
 
-   public void  stop (){
+   public void  stosStart (){
     Arm.setPosition(0);
     ArmTwo.setPosition(0);
+   }
+   public  void checkStop(){
+       boolean is_in=false;
+        if(getpos()==0){
+            is_in=true;
+        }
+
+
+
    }
 
 
