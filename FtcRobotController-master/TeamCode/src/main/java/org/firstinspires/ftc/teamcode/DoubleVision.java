@@ -148,7 +148,7 @@ public class DoubleVision  extends LinearOpMode {
         // TFOD Configuration
         // -----------------------------------------------------------------------------------------
 
-        //detector.processFrame(mat.t());
+        detector.processFrame(mat.t());
         // -----------------------------------------------------------------------------------------
         // Camera Configuration
         // -----------------------------------------------------------------------------------------
@@ -192,9 +192,8 @@ public class DoubleVision  extends LinearOpMode {
 
         // Step through the list of recognitions and display info for each one.
        // for (ColorDetector recognition : currentRecognitions) {
-
-              telemetry.addData("location",ColorDetector.Location);
-              telemetry.update();
+            if(recognition.getLocation() != null) {
+              telemetry.addData("location",recognition.getLocation());
             }
 
 

@@ -73,6 +73,9 @@ public class teleop extends LinearOpMode {
                        drawing.stop();
                     // עולה מספר טיקיים לפי לחיצת כפתור , מעלית + זרוע ביחד
 
+                       if (outtake.is_in()){
+                           outtake.PutIn();
+                       }
 
                     }
                      if(gamepad2.circle){

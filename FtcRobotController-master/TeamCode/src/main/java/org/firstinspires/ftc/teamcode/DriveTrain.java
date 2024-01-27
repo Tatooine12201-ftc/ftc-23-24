@@ -168,7 +168,8 @@ public class DriveTrain {
         return LBM.getCurrentPosition();
     }
 
-    public double getXrEncoder() {return RFM.getCurrentPosition();
+    public double getXrEncoder() {
+        return RFM.getCurrentPosition();
     }
 
     public double getYEncoder() {
