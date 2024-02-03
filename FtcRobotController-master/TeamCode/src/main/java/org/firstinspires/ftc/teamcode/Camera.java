@@ -28,10 +28,9 @@ public class Camera extends LinearOpMode {
     public void runOpMode() {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        //ColorDetector detector = new ColorDetector (Telemetry);
+
        // camera.setPipeline(detector);
 
 

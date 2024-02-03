@@ -20,13 +20,13 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 public class OutTake {
     private CRServo OTS = null;
 
-    TouchSensor  touch;
+   // TouchSensor  touch;
     private final LinearOpMode opMode;
     public OutTake (HardwareMap hw, LinearOpMode opMode) {
         this.opMode = opMode;
         OTS = hw.get(CRServo.class, "Prika");
         OTS.setDirection(CRServo.Direction.FORWARD);
-        touch = hw.get(TouchSensor.class, "Touch");
+     //   touch = hw.get(TouchSensor.class, "Touch");
     }
 
     public void PutOut2(){
@@ -39,8 +39,8 @@ public class OutTake {
         OTS.setPower(0);
     }
 
-    public  boolean is_in (){
-       return touch.isPressed();
-    }
+   // public  boolean is_in (){
+   //    return touch.isPressed();
+ //   }
 }
 

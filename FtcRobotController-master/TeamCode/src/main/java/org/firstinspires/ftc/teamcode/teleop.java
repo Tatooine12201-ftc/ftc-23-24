@@ -42,10 +42,6 @@ public class teleop extends LinearOpMode {
             Lift lift =new Lift ( hardwareMap ,this);
             OutTake outtake = new OutTake(hardwareMap, this);
             Arm arm = new Arm(hardwareMap,this);
-            AnalogInput analogInput = hardwareMap.get(AnalogInput.class, "myanaloginput");
-            //arm.pos();
-
-
 
 
             driveTrain.setStartPos(0,0,0);
@@ -73,9 +69,9 @@ public class teleop extends LinearOpMode {
                        drawing.stop();
                     // עולה מספר טיקיים לפי לחיצת כפתור , מעלית + זרוע ביחד
 
-                       if (outtake.is_in()){
-                           outtake.PutIn();
-                       }
+                       //if (outtake.is_in()){
+                           //outtake.PutIn();
+                     //  }
 
                     }
                      if(gamepad2.circle){
@@ -83,17 +79,9 @@ public class teleop extends LinearOpMode {
                      }
 
 
-
                 if (gamepad2.cross) {
-                    arm.pos();
-
-                }
-                else {
                     arm.stosStart();
-                }
-                if (gamepad2.square && isbussy) {
-                    arm.stosStart();
-                    isbussy = false;
+                 //   isbussy = false;
                 }
                 boolean is_in=true;
                     if (!isbussy && arm.getpos()==0){
@@ -105,6 +93,15 @@ public class teleop extends LinearOpMode {
                 }
 
 
+                // arm.InteSet(0.2);
+                if (gamepad2.square){
+                    arm.pos();
+                }
+
+
+
+
+
 
                     lift.lift(gamepad2.right_stick_y);
 
@@ -112,6 +109,8 @@ public class teleop extends LinearOpMode {
                     driveTrain.resetAngle();
                 }
                 driveTrain.update();
+
+                telemetry.addData("ang",arm.getpos());
 
                 gamepad1Old = gamepad1;
                 gamepad2Old = gamepad2;

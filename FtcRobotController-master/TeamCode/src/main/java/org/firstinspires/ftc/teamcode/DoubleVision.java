@@ -36,6 +36,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.openftc.easyopencv.OpenCvCamera;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -43,6 +44,9 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 import org.firstinspires.ftc.teamcode.ColorDetector;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.List;
 
@@ -79,9 +83,23 @@ public class DoubleVision  extends LinearOpMode {
      * The variable to store our instance of the vision portal.
      */
     private VisionPortal myVisionPortal;
-
+    OpenCvCamera camera;
     @Override
     public void runOpMode() {
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                camera.startStreaming(800,448 , OpenCvCameraRotation.UPRIGHT);
+
+            }
+
+            @Override
+            public void onError(int errorCode) {
+
+            }
+        });
 
         initDoubleVision();
 
@@ -148,7 +166,7 @@ public class DoubleVision  extends LinearOpMode {
         // TFOD Configuration
         // -----------------------------------------------------------------------------------------
 
-        detector.processFrame(mat.t());
+         //detector.processFrame(mat.t());
         // -----------------------------------------------------------------------------------------
         // Camera Configuration
         // -----------------------------------------------------------------------------------------

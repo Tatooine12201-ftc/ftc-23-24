@@ -1,6 +1,9 @@
 
         package org.firstinspires.ftc.teamcode;
 
+        import android.graphics.Canvas;
+
+        import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
         import org.firstinspires.ftc.vision.VisionPortal;
         import org.firstinspires.ftc.vision.VisionProcessor;
         import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -18,10 +21,12 @@
         import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
         import java.util.List;
 
-public abstract class ColorDetector implements VisionProcessor {
+public  class ColorDetector implements VisionProcessor {
     Telemetry telemetry;
     Mat mat = new Mat();
     private static final boolean USE_WEBCAM = true;  // true for webcam, fal
+
+    private boolean isRed = false;
 
     // se for phone camera
     //The variable to store our instance of the AprilTag processor.
@@ -31,62 +36,68 @@ public abstract class ColorDetector implements VisionProcessor {
     //The variable to store our instance of the vision portal.
     // ??
     private VisionPortal myVisionPortal;
-
-   // public static ColorDetector easyCreateWithDefaults()
- //   {
-  //      return new ColorDetector.Builder().build();
-  //  }
-   // public static class Builder{
-
-   // }
-
-
     public enum Location {
         LEFT,
         MIDDLE,
         RIGHT,
         NOT_FOUND
     }
-
     private Location location;
 
-    static final Rect LEFT_ROI = new Rect(
-            new Point(40, 40),
-            new Point(253, 408));
-    static final Rect MIDDLE_ROI = new Rect(
-            new Point(292, 40),
-            new Point(506, 408));
-    static final Rect RIGHT_ROI = new Rect(
-            new Point(546, 40),
-            new Point(759, 408));
+    static  Rect LEFT_ROI;
+    static  Rect MIDDLE_ROI ;
+    static  Rect RIGHT_ROI ;
     static double COLOR_THRESHOLD = 0.4;
 
-   // List<ColorDetector> contours;
+    // List<ColorDetector> contours;
     Mat hierachy;
 
-
-    public ColorDetector(Telemetry t) {
-        telemetry = t;
+    public ColorDetector(Telemetry telemetry, boolean isRed) {
+        this.telemetry = telemetry;
+        this.isRed = isRed;
     }
 
-   // @Override
-    public Mat processFrame(Mat input) {
-        Imgproc.cvtColor(input, mat, Imgproc.COLOR_RGB2HSV);
+    @Override
+    public void init(int width, int height, CameraCalibration calibration) {
+         LEFT_ROI = new Rect(
+                new Point(0, 40),
+                new Point(width/3.0 -50, 408));
 
-        // working blue
-        Scalar lowHSV = new Scalar(110, 50, 50);
-        Scalar hghHSV = new Scalar(130, 255, 255);
+        MIDDLE_ROI = new Rect(
+                new Point(width/3.0, 40),
+                new Point(width*2/3.0 -50, 408));
+
+        RIGHT_ROI = new Rect(
+                new Point(width*2/3.0, 40),
+                new Point(width, 408));
+
+    }
+
+    @Override
+    public Object processFrame(Mat frame, long captureTimeNanos) {
+        Imgproc.cvtColor(frame, frame, Imgproc.COLOR_RGB2HSV);
+        Scalar lowHSV;
+        Scalar hghHSV;
+        if(isRed){
+            lowHSV = new Scalar(0, 50, 70);
+            hghHSV = new Scalar(10, 255, 255);
+        }
+        else{
+            // working blue
+            lowHSV = new Scalar(110, 50, 50);
+            hghHSV = new Scalar(130, 255, 255);
+        }
 
         /*
         // working red
-        Scalar lowHSV = new Scalar(0, 50, 70);
-        Scalar hghHSV = new Scalar(10, 255, 255);
+        Scalar
+        Scalar
          */
 
-        Core.inRange(mat, lowHSV, hghHSV, mat);
-        Mat left = mat.submat(LEFT_ROI);
-        Mat right = mat.submat(RIGHT_ROI);
-        Mat middle = mat.submat(MIDDLE_ROI);
+        Core.inRange(frame, lowHSV, hghHSV, frame);
+        Mat left = frame.submat(LEFT_ROI);
+        Mat right = frame.submat(RIGHT_ROI);
+        Mat middle = frame.submat(MIDDLE_ROI);
 
         double leftValue = Core.sumElems(left).val[0] / LEFT_ROI.area() / 255;
         double rightValue = Core.sumElems(right).val[0] / RIGHT_ROI.area() / 255;
@@ -111,30 +122,60 @@ public abstract class ColorDetector implements VisionProcessor {
         if (Middle) {
             location = Location.MIDDLE;
             telemetry.addData("TeamProp Location", "middle");
-        } else if (Right) {
-            location = Location.RIGHT;
-            telemetry.addData("TeamProp Location", "right");
+
         } else if (Left) {
             location = Location.LEFT;
             telemetry.addData("TeamProp Location", "left");
         } else {
-            location = Location.NOT_FOUND;
-            telemetry.addData("TeamProp Location", "not found");
+            location = Location.RIGHT;
+            if(Right)
+            {
+                telemetry.addData("TeamProp Location", "right");
+            }
+            else{
+                telemetry.addData("TeamProp Location", "not found");
+            }
         }
         telemetry.update();
 
 
 
-        Imgproc.cvtColor(mat, mat, Imgproc.COLOR_GRAY2RGB);
+        Imgproc.cvtColor(frame, frame, Imgproc.COLOR_GRAY2RGB);
 
         Scalar Acolor_cub = new Scalar(0, 255, 0);
         Scalar Bcolor_cub = new Scalar(255, 0, 0);
 
-        Imgproc.rectangle(mat, LEFT_ROI, location == Location.LEFT ? Acolor_cub : Bcolor_cub);
-        Imgproc.rectangle(mat, RIGHT_ROI, location == Location.RIGHT ? Acolor_cub : Bcolor_cub);
-        Imgproc.rectangle(mat, MIDDLE_ROI, location == Location.MIDDLE ? Acolor_cub : Bcolor_cub);
-        return mat;
+        Imgproc.rectangle(frame, LEFT_ROI, location == Location.LEFT ? Acolor_cub : Bcolor_cub,10);
+        Imgproc.rectangle(frame, RIGHT_ROI, location == Location.RIGHT ? Acolor_cub : Bcolor_cub,10);
+        Imgproc.rectangle(frame, MIDDLE_ROI, location == Location.MIDDLE ? Acolor_cub : Bcolor_cub,10);
+        return null;
     }
+
+    @Override
+    public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
+
+    }
+
+    // public static ColorDetector easyCreateWithDefaults()
+ //   {
+  //      return new ColorDetector.Builder().build();
+  //  }
+   // public static class Builder{
+
+   // }
+
+
+
+
+
+
+
+    public void setRed(boolean isRed){
+        this.isRed = isRed;
+    }
+
+   // @Override
+
 
 
     public Location getLocation() {
