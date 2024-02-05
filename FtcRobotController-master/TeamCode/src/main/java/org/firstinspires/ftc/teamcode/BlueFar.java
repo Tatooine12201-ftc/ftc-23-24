@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.ColorDetector.Location;
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -21,8 +22,10 @@ public class BlueFar extends LinearOpMode{
     Drawing drawing;
     Camera camera;
     Location location;
+    Lift lift;
 
     ElapsedTime timer = new ElapsedTime();
+    Arm arm;
     private VisionPortal visionPortal;
 
 
@@ -31,6 +34,8 @@ public class BlueFar extends LinearOpMode{
         DriveTrain driveTrain = new DriveTrain(hardwareMap, this);
         Drawing drawing = new Drawing(hardwareMap,this);
         driveTrain.setStartPos(0, 0, 0);
+        Arm arm = new Arm(hardwareMap, this);
+        Lift lift = new Lift(hardwareMap, this);
 
         VisionPortal.Builder builder = new VisionPortal.Builder();
         builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
@@ -63,9 +68,16 @@ public class BlueFar extends LinearOpMode{
            }
             drawing.outtake();
             sleep(10);
-            driveTrain.driveTo(350, 0, 0, 200);
-            driveTrain.driveTo(0, 0, 0, 200);
-            driveTrain.driveTo(0, -400, 0, 200);
+            driveTrain.driveTo(200, 0, 0, 200);
+            driveTrain.driveTo(840,-900 , -90, 200);
+            lift.setLevel(1);
+            sleep(2000);
+            arm.pos();
+            sleep(2000);
+
+            lift.setLevel(0);
+
+            //   driveTrain.driveTo(0, 0, 0, 200);
 
 
         }

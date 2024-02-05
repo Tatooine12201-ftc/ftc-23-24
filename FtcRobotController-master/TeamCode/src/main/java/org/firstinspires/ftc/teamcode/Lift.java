@@ -19,7 +19,7 @@ public class Lift {
     //Calculate Counts Per MM
     private final double COUNTS_PER_MM = TICKS_PER_GOBILDA * GEAR_RATIO / PULLEY_DIAMETER * Math.PI;
     //Lift Levels
-    private final int[] levels = {5, 7};
+    private final int[] levels = {0, 7};
     // Lift Pid force
     private double KF = 0;
     // Lift Motor
@@ -34,6 +34,7 @@ public class Lift {
     //Lift level 0
     private int level = 0;
     private int pos =0;
+    private boolean isPowered = false;
 
     //lift settings
     public Lift(HardwareMap hw, LinearOpMode opMode) {
@@ -60,11 +61,6 @@ public class Lift {
 
     }
 
-    //setter
-    public Lift(DcMotor lift, DcMotor lifttwo) {
-        this.LiftMotor = lift;
-         this.LiftMotortow = lift;
-    }
 
     //ticks to MM and MM to ticks
     public double ticksToMM(double ticks) {
@@ -97,6 +93,7 @@ public class Lift {
     public int getEncoder() {
         return LiftMotor.getCurrentPosition();
 
+
     }
 
     //reset encoders ticks
@@ -110,19 +107,25 @@ public class Lift {
         LiftMotortow.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
        LiftMotortow.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-   // public void lift0(){
-      //  double Power1 =LiftMotor.getPower();
-     //   LiftMotor.setPower(-Power1);
-  //  }
+
 
     public void setpos(){
         LiftMotor.setTargetPosition(0);
         LiftMotortow.setTargetPosition(0);  }
     public void lift (double power ){
+            LiftMotor.setPower(power);
+            LiftMotortow.setPower(power);
+        }
 
-        LiftMotor.setPower(power);
-        LiftMotortow.setPower(power);
+
+    public void setF() {
+        if (getEncoder() > 0) {
+            pid.setF(0.25);
+            LiftMotor.setPower(pid.getF());
+            LiftMotortow.setPower(pid.getF());
+        }
     }
+
     public void LiftByTicks(){
           LiftMotor.setTargetPosition(LiftMotor.getCurrentPosition()+1);
           LiftMotortow.setTargetPosition(LiftMotortow.getCurrentPosition()+1);

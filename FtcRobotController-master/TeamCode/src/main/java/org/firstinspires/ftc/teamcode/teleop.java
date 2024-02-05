@@ -15,108 +15,99 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.TouchSensor;
-
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.DriveTrain;
 
  @TeleOp(name = "teleop", group = "OpMode")
     
 public class teleop extends LinearOpMode {
-        DriveTrain driveTrain;
-        Drawing drawing;
-      //  Lift lift;
-        Arm arm ;
-        OutTake outTake;
-        AnalogInput analogInput;
-        private boolean isbussy = true;
-        TouchSensor touch;
-        Gamepad gamepad1Old = new Gamepad();
-        Gamepad gamepad2Old = new Gamepad();
+     DriveTrain driveTrain;
+     Drawing drawing;
+     //  Lift lift;
+     Arm arm;
+     OutTake outTake;
+     AnalogInput analogInput;
+     private boolean isbussy = true;
+     TouchSensor touch;
+     Gamepad gamepad1Old = new Gamepad();
+     Gamepad gamepad2Old = new Gamepad();
+     ElapsedTime timer = new ElapsedTime();
+     boolean isPressed;
 
 
-        @Override
-        public void runOpMode() {
+     @Override
+     public void runOpMode() {
 
-            DriveTrain driveTrain = new DriveTrain(hardwareMap, this);
-            Drawing drawing = new Drawing(hardwareMap,this);
-            Lift lift =new Lift ( hardwareMap ,this);
-            OutTake outtake = new OutTake(hardwareMap, this);
-            Arm arm = new Arm(hardwareMap,this);
-
-
-            driveTrain.setStartPos(0,0,0);
-            driveTrain.reset();
-            telemetry.addData("Mode", "waiting");
-            telemetry.update();
-            waitForStart();
-            telemetry.addData("Mode", "waiting");
-            telemetry.update();
+         DriveTrain driveTrain = new DriveTrain(hardwareMap, this);
+         Drawing drawing = new Drawing(hardwareMap, this);
+         Lift lift = new Lift(hardwareMap, this);
+         OutTake outtake = new OutTake(hardwareMap, this);
+         Arm arm = new Arm(hardwareMap, this);
 
 
-            while (opModeIsActive() && !isStopRequested()) {
-                    driveTrain.Drive(-gamepad1.left_stick_y,gamepad1.left_stick_x, gamepad1.right_trigger - gamepad1.left_trigger);
+         driveTrain.setStartPos(0, 0, 0);
+         driveTrain.reset();
+         telemetry.addData("Mode", "waiting");
+         telemetry.update();
+         waitForStart();
+         telemetry.addData("Mode", "waiting");
+         telemetry.update();
 
-                   if (gamepad2.right_bumper) {
-                       drawing.inTake();
-                       outtake.PutIn();
 
-                    } else if  ( gamepad2.left_bumper){
-                       outtake.PutOut1();
-                   }
+         while (opModeIsActive() && !isStopRequested()) {
+             driveTrain.Drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_trigger - gamepad1.left_trigger);
 
-                     else {
-                       outtake.Stop();
-                       drawing.stop();
-                    // עולה מספר טיקיים לפי לחיצת כפתור , מעלית + זרוע ביחד
+             if (gamepad2.right_bumper) {
+                 drawing.inTake();
+                 outtake.PutIn();
 
-                       //if (outtake.is_in()){
-                           //outtake.PutIn();
-                     //  }
+             } else if (gamepad2.left_bumper) {
+                 outtake.PutOut1();
+             } else {
+                 outtake.Stop();
+                 drawing.stop();
+             }
 
-                    }
-                     if(gamepad2.circle){
-                         drawing.outtake();
+                 if (gamepad2.circle) {
+                     drawing.outtake();
+                 }
+
+                 if (gamepad2.cross) {
+                     arm.stosStart();
+
+                 }
+
+                 if (gamepad2.square) {
+                     arm.pos();
+                 }
+
+                 lift.lift(gamepad2.right_stick_y);
+                 isPressed = gamepad2.right_stick_y > 0.05;
+                 if (!isPressed) {
+                     lift.setF();
+                 }
+                 if (gamepad2.triangle) {
+                     while (timer.seconds()<0.5){
+                         arm.stosStart();
                      }
+                     lift.setLevel(0);
+                 }
 
 
-                if (gamepad2.cross) {
-                    arm.stosStart();
-                 //   isbussy = false;
-                }
-                boolean is_in=true;
-                    if (!isbussy && arm.getpos()==0){
-                        lift.setpos();
-                    }
+                 if (gamepad1.options) {
+                     driveTrain.resetAngle();
+                 }
+                 driveTrain.update();
 
-                if (gamepad2.dpad_up) {
-                    lift.LiftByTicks();
-                }
+                 telemetry.addData("ang", arm.getpos());
 
+                 gamepad1Old = gamepad1;
+                 gamepad2Old = gamepad2;
+                 telemetry.update();
+             }
 
-                // arm.InteSet(0.2);
-                if (gamepad2.square){
-                    arm.pos();
-                }
+         }
 
-
-
-
-
-
-                    lift.lift(gamepad2.right_stick_y);
-
-                if (gamepad1.options) {
-                    driveTrain.resetAngle();
-                }
-                driveTrain.update();
-
-                telemetry.addData("ang",arm.getpos());
-
-                gamepad1Old = gamepad1;
-                gamepad2Old = gamepad2;
-                telemetry.update();
-            }
-
-        }
-    }
+ }
 
