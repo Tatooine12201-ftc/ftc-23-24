@@ -53,29 +53,54 @@ public class BlueFar extends LinearOpMode{
             sleep(50);
         }
         visionPortal.setProcessorEnabled(colorDetector,false);
-        visionPortal.stopStreaming();
         if (opModeIsActive() && !isStopRequested()) {
-            if (location == Location.MIDDLE) {
+            driveTrain.driveTo(702, 0, 0, 3000);
 
-            driveTrain.driveTo(702, 0, 0, 200);
-
-        }
-          else if (location == Location.LEFT) {
-              driveTrain.driveTo(702, 0,-90,200);
-            }
-            else {
-                driveTrain.driveTo(702,0,90, 200);
-           }
             drawing.outtake();
             sleep(10);
-            driveTrain.driveTo(200, 0, 0, 200);
-            driveTrain.driveTo(840,-900 , -90, 200);
+           driveTrain.driveTo(200, 0, 0, 3000);
+            driveTrain.driveTo(840,-900 , -90, 3000);
             lift.setLevel(1);
             sleep(2000);
             arm.pos();
             sleep(2000);
-
             lift.setLevel(0);
+//
+//            if (location == Location.MIDDLE) {
+//
+//
+//
+//
+//            }
+//
+//          else if (location == Location.LEFT) {
+//              driveTrain.driveTo(702, 0,-90,200);
+//                // drawing.outtake();
+//               // sleep(10);
+//                driveTrain.driveTo(200, 0, 0, 200);
+//                driveTrain.driveTo(850,-900 , -90, 200);
+//                lift.setLevel(1);
+//                sleep(2000);
+//                arm.pos();
+//                sleep(2000);
+//                lift.setLevel(0);
+//
+//
+//            }
+//            else {
+//                driveTrain.driveTo(702,0,90, 200);
+//               // drawing.outtake();
+//               // sleep(10);
+//                driveTrain.driveTo(200, 0, 0, 200);
+//                driveTrain.driveTo(830,-900 , -90, 200);
+//                lift.setLevel(1);
+//                sleep(2000);
+//                arm.pos();
+//                sleep(2000);
+//                lift.setLevel(0);
+//
+//
+//            }
 
             //   driveTrain.driveTo(0, 0, 0, 200);
 

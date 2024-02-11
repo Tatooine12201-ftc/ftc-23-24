@@ -159,7 +159,7 @@ public class DriveTrain {
 
     public double Heading() {
         //return the heading of the robot (ccw is positive) in radians (0 to 2pi) and make sure that the start R is taken into account
-                robotHading_CWP = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+                robotHading_CWP = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) + startR;
                 robotHading_CCWP = -robotHading_CWP; //ccw is positive
             return NormalizeAngle(robotHading_CCWP); //normalize the angle to be between -pi and pi
     }

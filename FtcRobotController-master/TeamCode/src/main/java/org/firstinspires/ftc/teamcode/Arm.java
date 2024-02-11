@@ -40,10 +40,10 @@ public class Arm {
         ArmTwo.setDirection(Servo.Direction.FORWARD);
        // ArmTwo.setPosition(1);
 
-       pid=new Pid(0.5,0,0,0);
+       pid=new Pid(0.3,0,0,0.2);
        pid.setTolerance(0);
 
-       pid.setIntegrationBounds(-0.2,0.2);
+       pid.setIntegrationBounds(0,0);
 
 
 

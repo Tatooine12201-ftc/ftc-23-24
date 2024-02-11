@@ -13,19 +13,19 @@ public class Lift {
 //ticks per revolution
     public static double TICKS_PER_GOBILDA = 312;
     //gear ratio
-    public static double GEAR_RATIO = 53.0/13.0;
+    public static double GEAR_RATIO = 1.0/1.0;
     //Puly perimitar
     public static double PULLEY_DIAMETER = 20;
     //Calculate Counts Per MM
-    private final double COUNTS_PER_MM = TICKS_PER_GOBILDA * GEAR_RATIO / PULLEY_DIAMETER * Math.PI;
+    private final double COUNTS_PER_MM =( TICKS_PER_GOBILDA * GEAR_RATIO )/ (PULLEY_DIAMETER * Math.PI);
     //Lift Levels
-    private final int[] levels = {0, 7};
+    private final int[] levels = {0,1900,1000};
     // Lift Pid force
     private double KF = 0;
     // Lift Motor
     private DcMotor LiftMotor = null;
 
-    private DcMotor LiftMotortow;
+    private DcMotor LiftMotortow = null;
     //Lift PID
     private Pid pid;
     //Lift opMode
@@ -52,11 +52,13 @@ public class Lift {
 
         stop();
 
-        pid = new Pid(0, 0, 0, 0.55555569);
+        // 0.2
+        pid = new Pid(0.95, 0, 0, 0.5);
+
 
         KF = pid.getF();
 
-        pid.setIntegrationBounds(0, 0);
+        pid.setIntegrationBounds(-0.1, 0.1);
         pid.setTolerance(0);
 
     }
@@ -84,14 +86,14 @@ public class Lift {
 
     //set lift lvl to required lvl
     public void setLevel(int level) {
-        if (level >= 0 && level <= 7) {
+        if (level >= 0 && level <= 1) {
             this.level = level;
         }
     }
 
     //get Encoders ticks
-    public int getEncoder() {
-        return LiftMotor.getCurrentPosition();
+    public double getEncoder() {
+        return  LiftMotor.getCurrentPosition();
 
 
     }
@@ -108,10 +110,6 @@ public class Lift {
        LiftMotortow.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-
-    public void setpos(){
-        LiftMotor.setTargetPosition(0);
-        LiftMotortow.setTargetPosition(0);  }
     public void lift (double power ){
             LiftMotor.setPower(power);
             LiftMotortow.setPower(power);
@@ -126,11 +124,23 @@ public class Lift {
         }
     }
 
+    public void getpower(double p){
+        LiftMotor.setPower(p);
+        LiftMotortow.setPower(p);
+    }
+
     public void LiftByTicks(){
           LiftMotor.setTargetPosition(LiftMotor.getCurrentPosition()+1);
           LiftMotortow.setTargetPosition(LiftMotortow.getCurrentPosition()+1);
 
 
+    }
+    public void move (){
+        double target =levels[level];
+        double out ;
+        out=pid.calculate(getEncoder(),target);
+        LiftMotor.setPower(out);
+        LiftMotortow.setPower(out);
     }
 
 

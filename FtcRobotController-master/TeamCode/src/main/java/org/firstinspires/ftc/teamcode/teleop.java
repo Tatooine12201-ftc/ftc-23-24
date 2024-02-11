@@ -4,6 +4,7 @@ import android.media.FaceDetector;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.DriveTrain;
@@ -34,6 +35,8 @@ public class teleop extends LinearOpMode {
      Gamepad gamepad2Old = new Gamepad();
      ElapsedTime timer = new ElapsedTime();
      boolean isPressed;
+     boolean isArmUp =false;
+     boolean IsLiftDown = true;
 
 
      @Override
@@ -73,32 +76,64 @@ public class teleop extends LinearOpMode {
                      drawing.outtake();
                  }
 
-                 if (gamepad2.cross) {
+                 if (gamepad2.cross && IsLiftDown == false) {
                      arm.stosStart();
+                     isArmUp = false;
 
                  }
 
-                 if (gamepad2.square) {
+                 if (gamepad2.square && IsLiftDown == false) {
                      arm.pos();
+                     isArmUp = true;
                  }
 
-                 lift.lift(gamepad2.right_stick_y);
-                 isPressed = gamepad2.right_stick_y > 0.05;
-                 if (!isPressed) {
-                     lift.setF();
+             lift.lift(gamepad2.right_stick_y);
+
+                 if(gamepad2.triangle){
+                     lift.setLevel(1);
+                     lift.move();
+                     IsLiftDown =false;
                  }
-                 if (gamepad2.triangle) {
-                     while (timer.seconds()<0.5){
-                         arm.stosStart();
-                     }
+
+                 if(gamepad2.dpad_down && isArmUp == false){
                      lift.setLevel(0);
+                     lift.move();
+                     IsLiftDown =true;
                  }
+
+                 if(gamepad2.dpad_up ){
+                     lift.setLevel(2);
+                     lift.move();
+                     IsLiftDown = false;
+
+                 }
+                 telemetry.addData("le",lift.ticksToMM(lift.getEncoder()));
+                 telemetry.update();
+
+
+            // isPressed = gamepad2.right_stick_y > 0.05;
+             // if (!isPressed) {
+                 //    lift.setF();
+               //  }
+
+              //   if (gamepad2.triangle) {
+                 //    while (timer.seconds()<0.5){
+                      //   arm.stosStart();
+                    // }
+                   //  lift.setLevel(0);
+               //  }
+
+
 
 
                  if (gamepad1.options) {
                      driveTrain.resetAngle();
                  }
                  driveTrain.update();
+
+                 //lift.getpower(0.15);
+
+
 
                  telemetry.addData("ang", arm.getpos());
 
