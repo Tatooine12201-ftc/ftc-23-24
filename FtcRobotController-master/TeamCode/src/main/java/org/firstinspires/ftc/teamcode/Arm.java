@@ -31,8 +31,8 @@ public class Arm {
 
          Arm = hw.get(Servo.class ,"Arm");
          ArmTwo = hw.get(Servo.class, "ArnTwo");
-         analogInput = hw.get(AnalogInput.class, "analogInput");
-       analogInput2 = hw.get(AnalogInput.class, "analogInput2");
+         //analogInput = hw.get(AnalogInput.class, "analogInput");
+       //analogInput2 = hw.get(AnalogInput.class, "analogInput2");
 
 
         Arm .setDirection(Servo.Direction.REVERSE);

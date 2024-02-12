@@ -27,6 +27,7 @@ public class BlueFar extends LinearOpMode{
     ElapsedTime timer = new ElapsedTime();
     Arm arm;
     private VisionPortal visionPortal;
+    OutTake outTake;
 
 
     @Override
