@@ -40,10 +40,11 @@ public class Arm {
         ArmTwo.setDirection(Servo.Direction.FORWARD);
        // ArmTwo.setPosition(1);
 
-       pid=new Pid(0.3,0,0,0.2);
+       pid=new Pid(0,0,0,0.5);
        pid.setTolerance(0);
 
        pid.setIntegrationBounds(0,0);
+       pid.getF();
 
 
 
@@ -89,6 +90,7 @@ public class Arm {
    {
        Arm.setPosition(1);
        ArmTwo.setPosition(1);
+
    }
    public void InteSet(double Inteset){
        Arm.setPosition(Inteset);

@@ -46,20 +46,22 @@ public class Lift {
         LiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LiftMotortow.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LiftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        LiftMotortow.setDirection(DcMotorSimple.Direction.FORWARD);
+        LiftMotortow.setDirection(DcMotorSimple.Direction.REVERSE);
 
         resetEncoders();
 
         stop();
 
         // 0.2
-        pid = new Pid(0.95, 0, 0, 0.5);
+        //pid = new Pid(0.98, 0, 0, 0.9);
+        pid = new Pid(0.95, 0, 0, 0.7);
+
+        // KF = pid.getF();
 
 
-        KF = pid.getF();
-
-        pid.setIntegrationBounds(-0.1, 0.1);
+        pid.setIntegrationBounds(-0.17, 0.17);
         pid.setTolerance(0);
+        stop();
 
     }
 
@@ -86,7 +88,7 @@ public class Lift {
 
     //set lift lvl to required lvl
     public void setLevel(int level) {
-        if (level >= 0 && level <= 1) {
+        if (level >= 0 && level <= 2) {
             this.level = level;
         }
     }
@@ -95,7 +97,14 @@ public class Lift {
     public double getEncoder() {
         return  LiftMotor.getCurrentPosition();
 
+    }
+    public double getEncoder2() {
+        return  LiftMotortow.getCurrentPosition();
 
+    }
+
+    public double getF(){
+        return pid.getF();
     }
 
     //reset encoders ticks
@@ -137,10 +146,11 @@ public class Lift {
     }
     public void move (){
         double target =levels[level];
-        double out ;
+        double out =0;
         out=pid.calculate(getEncoder(),target);
         LiftMotor.setPower(out);
         LiftMotortow.setPower(out);
+
     }
 
 

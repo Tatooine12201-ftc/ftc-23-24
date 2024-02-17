@@ -84,8 +84,10 @@ public  class ColorDetector implements VisionProcessor {
         }
         else{
             // working blue
-            lowHSV = new Scalar(110, 50, 50);
-            hghHSV = new Scalar(130, 255, 255);
+            lowHSV = new Scalar(80,50, 70);
+            hghHSV = new Scalar(120,255,255);
+
+
         }
 
         /*
@@ -123,14 +125,14 @@ public  class ColorDetector implements VisionProcessor {
             location = Location.MIDDLE;
             telemetry.addData("TeamProp Location", "middle");
 
-        } else if (Left) {
-            location = Location.LEFT;
-            telemetry.addData("TeamProp Location", "left");
-        } else {
+        } else if (Right) {
             location = Location.RIGHT;
-            if(Right)
+            telemetry.addData("TeamProp Location", "right");
+        } else {
+            location = Location.LEFT;
+            if(Left)
             {
-                telemetry.addData("TeamProp Location", "right");
+                telemetry.addData("TeamProp Location", "left");
             }
             else{
                 telemetry.addData("TeamProp Location", "not found");

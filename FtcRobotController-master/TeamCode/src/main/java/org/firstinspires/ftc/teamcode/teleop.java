@@ -37,6 +37,7 @@ public class teleop extends LinearOpMode {
      boolean isPressed;
      boolean isArmUp =false;
      boolean IsLiftDown = true;
+     private static double KF =0;
 
 
      @Override
@@ -92,13 +93,16 @@ public class teleop extends LinearOpMode {
                  if(gamepad2.triangle){
                      lift.setLevel(1);
                      lift.move();
+                     KF+=lift.getF();
+                     KF=KF+0.1  ;
+
                      IsLiftDown =false;
                  }
 
-                 if(gamepad2.dpad_down && isArmUp == false){
+                 if(gamepad2.dpad_down ){
                      lift.setLevel(0);
                      lift.move();
-                     IsLiftDown =true;
+
                  }
 
                  if(gamepad2.dpad_up ){
@@ -107,6 +111,7 @@ public class teleop extends LinearOpMode {
                      IsLiftDown = false;
 
                  }
+
                  telemetry.addData("le",lift.ticksToMM(lift.getEncoder()));
                  telemetry.update();
 
@@ -131,7 +136,7 @@ public class teleop extends LinearOpMode {
                  }
                  driveTrain.update();
 
-                 //lift.getpower(0.15);
+             //lift.getpower(0.25);
 
 
 

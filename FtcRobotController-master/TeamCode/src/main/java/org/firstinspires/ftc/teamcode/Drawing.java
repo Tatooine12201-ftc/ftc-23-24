@@ -30,6 +30,10 @@ public class Drawing {
     }
     public void outtake() {
 
+        drawing.setPower(-1);
+    }
+    public void outtakeoTO() {
+
         drawing.setPower(-0.3);
     }
 
