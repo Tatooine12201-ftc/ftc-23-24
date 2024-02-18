@@ -54,7 +54,7 @@ public class Lift {
 
         // 0.2
         //pid = new Pid(0.98, 0, 0, 0.9);
-        pid = new Pid(0.95, 0, 0, 0.7);
+        pid = new Pid(0.95, 0, 0, 0.8);
 
         // KF = pid.getF();
 
@@ -99,7 +99,7 @@ public class Lift {
 
     }
     public double getEncoder2() {
-        return  LiftMotortow.getCurrentPosition();
+        return  -LiftMotortow.getCurrentPosition();
 
     }
 
@@ -133,6 +133,7 @@ public class Lift {
         }
     }
 
+
     public void getpower(double p){
         LiftMotor.setPower(p);
         LiftMotortow.setPower(p);
@@ -147,9 +148,15 @@ public class Lift {
     public void move (){
         double target =levels[level];
         double out =0;
+        double out2 =0;
         out=pid.calculate(getEncoder(),target);
+        out2 = pid.calculate(getEncoder2(), target);
         LiftMotor.setPower(out);
         LiftMotortow.setPower(out);
+        opMode.telemetry.addData("Encoder1",ticksToMM(getEncoder()));
+        opMode.telemetry.addData("Encoder2", ticksToMM(getEncoder2()));
+        opMode.telemetry.addData("target", target);
+        opMode.telemetry.update();
 
     }
 

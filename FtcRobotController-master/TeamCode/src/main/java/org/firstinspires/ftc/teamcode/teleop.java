@@ -83,6 +83,7 @@ public class teleop extends LinearOpMode {
 
                  }
 
+
                  if (gamepad2.square && IsLiftDown == false) {
                      arm.pos();
                      isArmUp = true;
@@ -93,9 +94,7 @@ public class teleop extends LinearOpMode {
                  if(gamepad2.triangle){
                      lift.setLevel(1);
                      lift.move();
-                     KF+=lift.getF();
-                     KF=KF+0.1  ;
-
+                   //  lift.setF();
                      IsLiftDown =false;
                  }
 

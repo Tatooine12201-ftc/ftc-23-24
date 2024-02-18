@@ -40,10 +40,11 @@ public class Test extends LinearOpMode {
                 //driveTrain.driveTo(1000, 0, 0, 30000000);
                // driveTrain.driveTo(0, 0, 90, 30000000);
                     //  driveTrain.driveTo(0,0,90,3000000);
-                     lift.setLevel(1);
-                     lift.move();
+                    driveTrain.Drive(0, 0.20, 0 );
+              //       lift.setLevel(1);
+             //        lift.move();
 
-                    arm.pos();
+              //      arm.pos();
 
 
             }
