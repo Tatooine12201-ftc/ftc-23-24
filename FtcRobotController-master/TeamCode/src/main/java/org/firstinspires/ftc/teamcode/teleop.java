@@ -29,6 +29,7 @@ public class teleop extends LinearOpMode {
      Arm arm;
      OutTake outTake;
      AnalogInput analogInput;
+     FlayingAirPlaine flayingAirPlaine;
      private boolean isbussy = true;
      TouchSensor touch;
      Gamepad gamepad1Old = new Gamepad();
@@ -48,12 +49,13 @@ public class teleop extends LinearOpMode {
          Lift lift = new Lift(hardwareMap, this);
          OutTake outtake = new OutTake(hardwareMap, this);
          Arm arm = new Arm(hardwareMap, this);
-
+         FlayingAirPlaine flayingAirPlaine = new FlayingAirPlaine(hardwareMap, this);
 
          driveTrain.setStartPos(0, 0, 0);
          driveTrain.reset();
          telemetry.addData("Mode", "waiting");
          telemetry.update();
+         arm.stosStart();
          waitForStart();
          telemetry.addData("Mode", "waiting");
          telemetry.update();
@@ -108,9 +110,13 @@ public class teleop extends LinearOpMode {
                      lift.setLevel(2);
                      lift.move();
                      IsLiftDown = false;
-
                  }
-
+                if (gamepad2.left_stick_button){
+                    flayingAirPlaine.Fly();
+                }
+                else {
+                    flayingAirPlaine.Return();
+                }
                  telemetry.addData("le",lift.ticksToMM(lift.getEncoder()));
                  telemetry.update();
 

@@ -28,7 +28,7 @@ public class BlueFar extends LinearOpMode {
     Arm arm;
     private VisionPortal visionPortal;
     OutTake outTake;
-    private int count =0;
+    private int count = 0;
 
 
     @Override
@@ -38,7 +38,7 @@ public class BlueFar extends LinearOpMode {
         driveTrain.setStartPos(0, 0, 0);
         Arm arm = new Arm(hardwareMap, this);
         Lift lift = new Lift(hardwareMap, this);
-        OutTake outTake =new OutTake(hardwareMap,this);
+        OutTake outTake = new OutTake(hardwareMap, this);
 
         VisionPortal.Builder builder = new VisionPortal.Builder();
         builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
@@ -46,8 +46,6 @@ public class BlueFar extends LinearOpMode {
         builder.enableLiveView(true);
         builder.addProcessor(colorDetector);
         visionPortal = builder.build();
-
-
 
 
         driveTrain.reset();
@@ -62,23 +60,23 @@ public class BlueFar extends LinearOpMode {
 
 //
             if (location == Location.MIDDLE) {
-                driveTrain.driveTo(650, 70, 0, 3000);
+                driveTrain.driveTo(650, -  70, 0, 2000);
                 drawing.outtakeoTO();
                 sleep(3000);
                 drawing.stop();
-                driveTrain.driveTo(650, 0, 0, 3000);
-                driveTrain.driveTo(300, -50, 0, 3000);
+                driveTrain.driveTo(650, 0, 0, 2000);
+                driveTrain.driveTo(300, -50, 0, 2000);
 
-               // lift.setLevel(1);
+                // lift.setLevel(1);
                 sleep(1000);
                 // arm.pos();
                 sleep(1000);
-                driveTrain.driveTo(680, -780, 90, 4000);
-               // outTake.PutOut1();
-                driveTrain.driveTo(680, -700, 90, 4000);
-                driveTrain.driveTo(680, -800, 90, 3000);
+                driveTrain.driveTo(680, -780, 90, 2000);
+                // outTake.PutOut1();
+                driveTrain.driveTo(680, -700, 90, 2000);
+                driveTrain.driveTo(680, -800, 90, 2000);
 
-                while (count<16){
+                /*ָָָָָwhile (count<12){
                     lift.setLevel(1);
                     lift.move();
                     count++;
@@ -88,25 +86,29 @@ public class BlueFar extends LinearOpMode {
                 sleep(2000);
                 outTake.PutOut1();
                 sleep(2000);
-                driveTrain.driveTo(680, -760, 90, 3000);
+                driveTrain.driveTo(680, -760, 90, 2000);
                 arm.stosStart();
                 sleep(1000);
                 lift.setLevel(0);
                 lift.move();
+                sleep(1000);
 
 
+
+            */
             } else if (location == Location.LEFT) {
-             //   driveTrain.driveTo(0, -70, 0, 3000);
-                driveTrain.driveTo(0, -300, 0, 2000);
-                driveTrain.driveTo(500, -300, 0, 2000);
+
+                //   driveTrain.driveTo(0, -70, 0, 3000);
+                driveTrain.driveTo(0, -270, 0, 2000);
+                driveTrain.driveTo(500, -270, 0, 2000);
                 //drawing.outtakeoTO();
                 //sleep(3000);
-                driveTrain.driveTo(100, -150, 0, 3000);
-                driveTrain.driveTo(680, -780, 90, 4000);
-                driveTrain.driveTo(680, -800, 90, 3000);
-
-                while (count<16){
-                    lift.setLevel(1);
+                driveTrain.driveTo(100, -150, 0, 2000);
+                driveTrain.driveTo(660, -780, 90, 2000);
+                driveTrain.driveTo(660, -800, 90, 2000);
+/*
+                while (count < 12) {
+                    lift.setLevel(2);
                     lift.move();
                     count++;
                 }
@@ -115,47 +117,50 @@ public class BlueFar extends LinearOpMode {
                 sleep(2000);
                 outTake.PutOut1();
                 sleep(2000);
-                driveTrain.driveTo(680, -760, 90, 3000);
+                driveTrain.driveTo(700, -760, 90, 2000);
                 arm.stosStart();
                 sleep(1000);
                 lift.setLevel(0);
                 lift.move();
+                sleep(1000);
+                */
+
             }
-
-
             else {
 
-                driveTrain.driveTo(650, 0, 0, 1000);
-                driveTrain.driveTo(630, -30, 0, 1000);
-                driveTrain.driveTo(630, -30, 90, 1000);
-                driveTrain.driveTo(630, 52, 90, 500);
+                driveTrain.driveTo(520, 0, 0, 1000);
+                driveTrain.driveTo(520, 140, 0, 1000);
+                driveTrain.driveTo(520, 140, 45, 1000);
+                driveTrain.driveTo(520, 180, 45, 1000);
                 sleep(3000);
-                drawing.stop();
                 driveTrain.driveTo(50, -50, 0, 2000);
+                driveTrain.driveTo(0, 0, 0, 2000);
+                sleep(1000);
+                driveTrain.driveTo(700, -800, 90, 3000);
+/*
+                while (count < 12) {
+                    lift.setLevel(2);
+                    lift.move();
+                    count++;
+                }
                 sleep(2000);
-                sleep(2000);
-                driveTrain.driveTo(680, -800, 90, 3000);
-
-                 while (count<16){
-                     lift.setLevel(1);
-                      lift.move();
-                      count++;
-                 }
-                 sleep(2000);
                 arm.pos();
                 sleep(2000);
                 outTake.PutOut1();
                 sleep(2000);
-                driveTrain.driveTo(680, -760, 90, 3000);
+                driveTrain.driveTo(680, -760, 90, 2000);
                 arm.stosStart();
                 sleep(1000);
                 lift.setLevel(0);
                 lift.move();
+                sleep(1000);
 
 
+ */
 
             }
 
         }
     }
 }
+

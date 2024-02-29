@@ -14,7 +14,7 @@ public class Arm {
 
      private Servo Arm =null;
      private Servo ArmTwo = null;
-     private final LinearOpMode opMode;
+    private final LinearOpMode opMode;
      Pid pid ;
      AnalogInput analogInput;
     AnalogInput analogInput2;

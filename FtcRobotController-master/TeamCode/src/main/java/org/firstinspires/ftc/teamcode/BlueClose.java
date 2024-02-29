@@ -52,39 +52,39 @@ public class BlueClose extends LinearOpMode {
         visionPortal.setProcessorEnabled(colorDetector, false);
         if (opModeIsActive() && !isStopRequested()) {
             if (location == ColorDetector.Location.MIDDLE) {
-                driveTrain.driveTo(650, 70, 0, 3000);
+                driveTrain.driveTo(665,70, 0, 32000);
                 drawing.outtakeoTO();
-                sleep(3000);
-                driveTrain.driveTo(650, 0, 0, 3000);
-                driveTrain.driveTo(300, -50, 0, 3000);
+                sleep(1500);
                 drawing.stop();
-                sleep(1000);
-                driveTrain.driveTo(0,0,0,3000);
-                driveTrain.driveTo(100, 0, 0, 2000);
-                driveTrain.driveTo(100, 0, -90, 2000);
-                driveTrain.driveTo(100, -2400, -90, 2000);
+                driveTrain.driveTo(80,70,-90,2000);
+                driveTrain.driveTo(80, -2000, -90, 4500);
+                driveTrain.driveTo(80, -2100, 0, 2000);
+
 
 
 
             }
-            if (location == ColorDetector.Location.RIGHT) {
-                driveTrain.driveTo(0, 270, 0, 2000);
-                driveTrain.driveTo(500, 270, 0, 2000);
-                driveTrain.driveTo(100, 270, 0, 2000);
-                driveTrain.driveTo(100, 270, -90, 2000);
-                driveTrain.driveTo(100, -2400, -90, 2000);
+           else if (location == ColorDetector.Location.RIGHT) {
+                driveTrain.driveTo(300, 270, 0, 1500);
+                driveTrain.driveTo(500, 270, 0, 1500);
+                 driveTrain.driveTo(100, 270, 0, 1500);
+                driveTrain.driveTo(50, 50, 0, 1000);
+                driveTrain.driveTo(70,0,-90,2000);
+                driveTrain.driveTo(70, -2000, -90, 4500);
+                driveTrain.driveTo(70, -2100, 0, 2000);
+
 
 
             }
             else {
-                driveTrain.driveTo(580, 0, 0, 1000);
-                driveTrain.driveTo(580, 0, -90, 1000);
-                driveTrain.driveTo(580, -120, -90, 1000);
-                driveTrain.driveTo(580, 0, -90, 1000);
-                driveTrain.driveTo(0,0,0,3000);
-                driveTrain.driveTo(100, 0, 0, 2000);
-                driveTrain.driveTo(100, 0, -90, 2000);
-                driveTrain.driveTo(100, -2400, -90, 2000);
+                driveTrain.driveTo(530, 0, 0, 1000);
+                driveTrain.driveTo(530, 0, -45, 1000);
+                driveTrain.driveTo(530, -240, -45, 1000);
+                  driveTrain.driveTo(50, 50, 0, 1000);
+                driveTrain.driveTo(70,0,-90,2000);
+                driveTrain.driveTo(70, -2000, -90, 4500);
+                driveTrain.driveTo(70, -2100, 0, 2000);
+
 
 
             }

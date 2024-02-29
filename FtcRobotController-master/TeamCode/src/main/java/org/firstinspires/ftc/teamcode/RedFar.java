@@ -18,17 +18,15 @@ import org.firstinspires.ftc.vision.VisionPortal;
 public class RedFar extends LinearOpMode {
 
     DriveTrain driveTrain;
-    ColorDetector colorDetector = new ColorDetector(telemetry, false);
+    ColorDetector colorDetector = new ColorDetector(telemetry, true);
     Drawing drawing;
     Camera camera;
-    Location location;
+    ColorDetector.Location location;
     Lift lift;
-
+    OutTake outTake;
     ElapsedTime timer = new ElapsedTime();
     Arm arm;
     private VisionPortal visionPortal;
-    OutTake outTake;
-    private int count =0;
 
 
     @Override
@@ -38,7 +36,6 @@ public class RedFar extends LinearOpMode {
         driveTrain.setStartPos(0, 0, 0);
         Arm arm = new Arm(hardwareMap, this);
         Lift lift = new Lift(hardwareMap, this);
-        OutTake outTake =new OutTake(hardwareMap,this);
 
         VisionPortal.Builder builder = new VisionPortal.Builder();
         builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
@@ -48,114 +45,53 @@ public class RedFar extends LinearOpMode {
         visionPortal = builder.build();
 
 
-
-
         driveTrain.reset();
         while (opModeInInit()) {
             location = colorDetector.getLocation();
 
-            sleep(30);
+            sleep(50);
         }
         visionPortal.setProcessorEnabled(colorDetector, false);
         if (opModeIsActive() && !isStopRequested()) {
-
-
-//
-            if (location == Location.MIDDLE) {
-                driveTrain.driveTo(650, -70, 0, 3000);
+            if (location == ColorDetector.Location.MIDDLE) {
+                driveTrain.driveTo(650, 70, 0, 1500);
                 drawing.outtakeoTO();
-                sleep(3000);
+                sleep(1000);
                 drawing.stop();
-                driveTrain.driveTo(650, 0, 0, 3000);
-                driveTrain.driveTo(300, 50, 0, 3000);
-
-                // lift.setLevel(1);
-                sleep(1000);
-                // arm.pos();
-                sleep(1000);
-                driveTrain.driveTo(680, 780, 90, 4000);
+                driveTrain.driveTo(680, 780, 90, 2000);
                 // outTake.PutOut1();
-                driveTrain.driveTo(680, 700, 90, 4000);
-                driveTrain.driveTo(680, 800, 90, 3000);
-
-                while (count<16){
-                    lift.setLevel(1);
-                    lift.move();
-                    count++;
-                }
-                sleep(2000);
-                arm.pos();
-                sleep(2000);
-                outTake.PutOut1();
-                sleep(2000);
-                driveTrain.driveTo(680, 760, 90, 3000);
-                arm.stosStart();
-                sleep(1000);
-                lift.setLevel(0);
-                lift.move();
+                driveTrain.driveTo(680, 700, 90, 2000);
+                driveTrain.driveTo(680, 800, 90, 2000);
 
 
-            } else if (location == Location.LEFT) {
-                //   driveTrain.driveTo(0, -70, 0, 3000);
-                driveTrain.driveTo(0, 300, 0, 2000);
-                driveTrain.driveTo(500, 300, 0, 2000);
-                //drawing.outtakeoTO();
-                //sleep(3000);
-                driveTrain.driveTo(100, 150, 0, 3000);
-                driveTrain.driveTo(680, 780, 90, 4000);
-                driveTrain.driveTo(680, 800, 90, 3000);
 
-                while (count<16){
-                    lift.setLevel(1);
-                    lift.move();
-                    count++;
-                }
-                sleep(2000);
-                arm.pos();
-                sleep(2000);
-                outTake.PutOut1();
-                sleep(2000);
-                driveTrain.driveTo(680, 760, 90, 3000);
-                arm.stosStart();
-                sleep(1000);
-                lift.setLevel(0);
-                lift.move();
             }
+            else if (location == ColorDetector.Location.RIGHT) {
+                driveTrain.driveTo(300, 270, 0, 1500);
+                driveTrain.driveTo(500, 270, 0, 1500);
+                driveTrain.driveTo(100, 270, 0, 1500);
+                driveTrain.driveTo(680, 780, 90, 2000);
+                // outTake.PutOut1();
+                driveTrain.driveTo(680, 700, 90, 2000);
+                driveTrain.driveTo(680, 800, 90, 2000);
 
 
+            }
             else {
-
-                driveTrain.driveTo(650, 0, 0, 1000);
-                driveTrain.driveTo(630, 30, 0, 1000);
-                driveTrain.driveTo(630, 30, 90, 1000);
-                driveTrain.driveTo(630, -52, 90, 500);
-                sleep(3000);
-                drawing.stop();
-                driveTrain.driveTo(50, 50, 0, 2000);
-                sleep(2000);
-                sleep(2000);
-                driveTrain.driveTo(680, 800, 90, 3000);
-
-                while (count<16){
-                    lift.setLevel(1);
-                    lift.move();
-                    count++;
-                }
-                sleep(2000);
-                arm.pos();
-                sleep(2000);
-                outTake.PutOut1();
-                sleep(2000);
-                driveTrain.driveTo(680, 760, 90, 3000);
-                arm.stosStart();
-                sleep(1000);
-                lift.setLevel(0);
-                lift.move();
-
+                driveTrain.driveTo(530, 0, 0, 1000);
+                driveTrain.driveTo(530, 0, -45, 1000);
+                driveTrain.driveTo(530, -240, -45, 1000);
+                driveTrain.driveTo(50, 50, 0, 1000);
+                driveTrain.driveTo(680, 780, 90, 2000);
+                // outTake.PutOut1();
+                driveTrain.driveTo(680, 700, 90, 2000);
+                driveTrain.driveTo(680, 800, 90, 2000);
 
 
             }
 
         }
+
+
     }
 }
