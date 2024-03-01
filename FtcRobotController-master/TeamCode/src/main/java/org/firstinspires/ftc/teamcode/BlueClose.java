@@ -52,13 +52,13 @@ public class BlueClose extends LinearOpMode {
         visionPortal.setProcessorEnabled(colorDetector, false);
         if (opModeIsActive() && !isStopRequested()) {
             if (location == ColorDetector.Location.MIDDLE) {
-                driveTrain.driveTo(665,70, 0, 32000);
+                driveTrain.driveTo(640,70, 0, 3200);
                 drawing.outtakeoTO();
                 sleep(1500);
                 drawing.stop();
-                driveTrain.driveTo(80,70,-90,2000);
-                driveTrain.driveTo(80, -2000, -90, 4500);
-                driveTrain.driveTo(80, -2100, 0, 2000);
+                driveTrain.driveTo(60,70,-90,2000);
+                driveTrain.driveTo(60, -2000, -90, 4500);
+                driveTrain.driveTo(60, -2100, 0, 2000);
 
 
 
@@ -69,9 +69,9 @@ public class BlueClose extends LinearOpMode {
                 driveTrain.driveTo(500, 270, 0, 1500);
                  driveTrain.driveTo(100, 270, 0, 1500);
                 driveTrain.driveTo(50, 50, 0, 1000);
-                driveTrain.driveTo(70,0,-90,2000);
-                driveTrain.driveTo(70, -2000, -90, 4500);
-                driveTrain.driveTo(70, -2100, 0, 2000);
+                driveTrain.driveTo(50,0,-90,2000);
+                driveTrain.driveTo(50, -2000, -90, 4500);
+                driveTrain.driveTo(50, -2100, 0, 2000);
 
 
 
@@ -81,9 +81,9 @@ public class BlueClose extends LinearOpMode {
                 driveTrain.driveTo(530, 0, -45, 1000);
                 driveTrain.driveTo(530, -240, -45, 1000);
                   driveTrain.driveTo(50, 50, 0, 1000);
-                driveTrain.driveTo(70,0,-90,2000);
-                driveTrain.driveTo(70, -2000, -90, 4500);
-                driveTrain.driveTo(70, -2100, 0, 2000);
+                driveTrain.driveTo(60,0,-90,2000);
+                driveTrain.driveTo(60, -2000, -90, 4500);
+                driveTrain.driveTo(60, -2100, 0, 2000);
 
 
 

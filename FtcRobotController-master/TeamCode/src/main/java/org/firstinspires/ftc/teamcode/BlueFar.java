@@ -67,16 +67,14 @@ public class BlueFar extends LinearOpMode {
                 driveTrain.driveTo(650, 0, 0, 2000);
                 driveTrain.driveTo(300, -50, 0, 2000);
 
-                // lift.setLevel(1);
+
                 sleep(1000);
                 // arm.pos();
                 sleep(1000);
                 driveTrain.driveTo(680, -780, 90, 2000);
-                // outTake.PutOut1();
                 driveTrain.driveTo(680, -700, 90, 2000);
                 driveTrain.driveTo(680, -800, 90, 2000);
-
-                /*ָָָָָwhile (count<12){
+           /*     while (count<12){
                     lift.setLevel(1);
                     lift.move();
                     count++;
@@ -93,14 +91,15 @@ public class BlueFar extends LinearOpMode {
                 lift.move();
                 sleep(1000);
 
+*/
 
 
-            */
             } else if (location == Location.LEFT) {
 
                 //   driveTrain.driveTo(0, -70, 0, 3000);
-                driveTrain.driveTo(0, -270, 0, 2000);
-                driveTrain.driveTo(500, -270, 0, 2000);
+                driveTrain.driveTo(0, -+
+                        200, 0, 2000);
+                driveTrain.driveTo(500, -200, 0, 2000);
                 //drawing.outtakeoTO();
                 //sleep(3000);
                 driveTrain.driveTo(100, -150, 0, 2000);
@@ -129,9 +128,9 @@ public class BlueFar extends LinearOpMode {
             else {
 
                 driveTrain.driveTo(520, 0, 0, 1000);
-                driveTrain.driveTo(520, 140, 0, 1000);
-                driveTrain.driveTo(520, 140, 45, 1000);
-                driveTrain.driveTo(520, 180, 45, 1000);
+                driveTrain.driveTo(520, 160, 0, 1000);
+                driveTrain.driveTo(520, 160, 45, 1000);
+                driveTrain.driveTo(520, 160, 45, 1000);
                 sleep(3000);
                 driveTrain.driveTo(50, -50, 0, 2000);
                 driveTrain.driveTo(0, 0, 0, 2000);

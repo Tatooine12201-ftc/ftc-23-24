@@ -159,6 +159,14 @@ public class Lift {
         opMode.telemetry.update();
 
     }
+    public void MoveForAtonomomus(){
+        LiftMotor.setPower(0.5);
+        LiftMotortow.setPower(0.5);
+    }
+    public void FForAtonomomus(){
+        LiftMotor.setPower(0.15);
+        LiftMotortow.setPower(0.15);
+    }
 
 
 }
