@@ -15,11 +15,11 @@ public class Lift {
     //gear ratio
     public static double GEAR_RATIO = 1.0/1.0;
     //Puly perimitar
-    public static double PULLEY_DIAMETER = 20;
+    public static double PULLEY_DIAMETER = 0;
     //Calculate Counts Per MM
     private final double COUNTS_PER_MM =( TICKS_PER_GOBILDA * GEAR_RATIO )/ (PULLEY_DIAMETER * Math.PI);
     //Lift Levels
-    private final int[] levels = {0,1900,1000};
+    private final int[] levels = {0,1900,1000, 600};
     // Lift Pid force
     private double KF = 0;
     // Lift Motor
@@ -53,14 +53,15 @@ public class Lift {
         stop();
 
         // 0.2
-        //pid = new Pid(0.98, 0, 0, 0.9);
-        pid = new Pid(0.95, 0, 0, 0.8);
+        //  pid = new Pid(0, 0, 0, 0);
+        pid = new Pid(0.95, 0, 0, 0.9);
 
         // KF = pid.getF();
 
 
-        pid.setIntegrationBounds(-0.17, 0.17);
-        pid.setTolerance(0);
+      //  pid.setIntegrationBounds(-0.17, 0.17);
+        pid.setIntegrationBounds(-0.25,0.25 );
+        pid.setTolerance(5);
         stop();
 
     }
@@ -81,6 +82,7 @@ public class Lift {
         LiftMotortow.setPower(0);
 
     }
+
 // get lift lvl and return lift lvl
     public int getLevel() {
         return this.level;
@@ -88,18 +90,29 @@ public class Lift {
 
     //set lift lvl to required lvl
     public void setLevel(int level) {
-        if (level >= 0 && level <= 2) {
+        if (level >= 0 && level <= 4) {
             this.level = level;
         }
     }
+    public void setFforLevel(){
+        if (levels[level] ==2){
+            pid.setF(0.4);
+            LiftMotor.setPower(pid.getF());
+            LiftMotortow.setPower(pid.getF());
+        }
+        if (levels[level] ==3){
+            pid.setF(0.3);
+            LiftMotor.setPower(move()+pid.getF());
+        }
 
+    }
     //get Encoders ticks
     public double getEncoder() {
         return  LiftMotor.getCurrentPosition();
 
     }
     public double getEncoder2() {
-        return  -LiftMotortow.getCurrentPosition();
+        return  LiftMotortow.getCurrentPosition();
 
     }
 
@@ -145,7 +158,9 @@ public class Lift {
 
 
     }
-    public void move (){
+
+
+    public double move (){
         double target =levels[level];
         double out =0;
         double out2 =0;
@@ -153,11 +168,11 @@ public class Lift {
         out2 = pid.calculate(getEncoder2(), target);
         LiftMotor.setPower(out);
         LiftMotortow.setPower(out);
-        opMode.telemetry.addData("Encoder1",ticksToMM(getEncoder()));
-        opMode.telemetry.addData("Encoder2", ticksToMM(getEncoder2()));
+       // opMode.telemetry.addData("Encoder1",ticksToMM(getEncoder()));
+        //opMode.telemetry.addData("Encoder2", ticksToMM(getEncoder2()));
         opMode.telemetry.addData("target", target);
         opMode.telemetry.update();
-
+        return out;
     }
     public void MoveForAtonomomus(){
         LiftMotor.setPower(0.5);

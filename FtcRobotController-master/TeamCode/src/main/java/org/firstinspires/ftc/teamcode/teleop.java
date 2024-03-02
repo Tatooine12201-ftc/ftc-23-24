@@ -94,7 +94,7 @@ public class teleop extends LinearOpMode {
              lift.lift(gamepad2.right_stick_y);
 
                  if(gamepad2.triangle){
-                     lift.setLevel(1);
+                     lift.setLevel(3);
                      lift.move();
                    //  lift.setF();
                      IsLiftDown =false;
@@ -117,7 +117,7 @@ public class teleop extends LinearOpMode {
                 else {
                     flayingAirPlaine.Return();
                 }
-                 telemetry.addData("le",lift.ticksToMM(lift.getEncoder()));
+                 telemetry.addData("le",lift.getEncoder());
                  telemetry.update();
 
 
