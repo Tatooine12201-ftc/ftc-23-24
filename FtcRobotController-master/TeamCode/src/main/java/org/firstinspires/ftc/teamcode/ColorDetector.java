@@ -64,7 +64,7 @@ public  class ColorDetector implements VisionProcessor {
                 new Point(width/3.0 -50, 408));
 
         MIDDLE_ROI = new Rect(
-                new Point(width/3.0, 40),
+                new Point(width/3.0+50, 40),
                 new Point(width*2/3.0 -50, 408));
 
         RIGHT_ROI = new Rect(

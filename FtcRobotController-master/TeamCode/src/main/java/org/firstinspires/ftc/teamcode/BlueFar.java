@@ -28,6 +28,7 @@ public class BlueFar extends LinearOpMode {
     Arm arm;
     private VisionPortal visionPortal;
     OutTake outTake;
+
     private int count = 0;
 
 
@@ -40,126 +41,128 @@ public class BlueFar extends LinearOpMode {
         Lift lift = new Lift(hardwareMap, this);
         OutTake outTake = new OutTake(hardwareMap, this);
 
+
         VisionPortal.Builder builder = new VisionPortal.Builder();
         builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
         builder.setCameraResolution(new Size(800, 448));
         builder.enableLiveView(true);
         builder.addProcessor(colorDetector);
         visionPortal = builder.build();
-
+        driveTrain.resetAngle();
 
         driveTrain.reset();
         while (opModeInInit()) {
             location = colorDetector.getLocation();
-
+            // driveTrain.resetAngle();
             sleep(30);
         }
         visionPortal.setProcessorEnabled(colorDetector, false);
         if (opModeIsActive() && !isStopRequested()) {
 
-
-//
             if (location == Location.MIDDLE) {
-                driveTrain.driveTo(650, -  70, 0, 2000);
+                driveTrain.driveTo(730,-110, 0, 2500);
                 drawing.outtakeoTO();
-                sleep(3000);
+                sleep(1500);
                 drawing.stop();
-                driveTrain.driveTo(650, 0, 0, 2000);
-                driveTrain.driveTo(300, -50, 0, 2000);
+                driveTrain.driveTo(0, -20, 0, 2500);
+                driveTrain.driveTo(640, -620, 0, 2500);
+                driveTrain.driveTo(640, -620, 100, 2500);
+                timer.reset();
+                timer.startTime();
+                if (timer.milliseconds()<0.5){
+                    lift.lift(1);
+                }
+                arm.pos7();
 
-
+                sleep(2000);
+                driveTrain.driveTo(640,-880,100,2000);
+                outTake.PutOut1();
                 sleep(1000);
-                // arm.pos();
-                sleep(1000);
-                driveTrain.driveTo(680, -780, 90, 2000);
-                driveTrain.driveTo(680, -700, 90, 2000);
-                driveTrain.driveTo(680, -800, 90, 2000);
-           /*     while (count<12){
-                    lift.setLevel(1);
-                    lift.move();
-                    count++;
+                driveTrain.driveTo(650, -660, 100, 2500);
+                arm.stosStart();
+                sleep(2000);
+                outTake.Stop();
+                timer.reset();
+                while (timer.seconds()<4) {
+                    lift.lift(-1);
                 }
                 sleep(2000);
-                arm.pos();
-                sleep(2000);
-                outTake.PutOut1();
-                sleep(2000);
-                driveTrain.driveTo(680, -760, 90, 2000);
-                arm.stosStart();
-                sleep(1000);
-                lift.setLevel(0);
-                lift.move();
-                sleep(1000);
-
-*/
 
 
             } else if (location == Location.LEFT) {
 
-                //   driveTrain.driveTo(0, -70, 0, 3000);
-                driveTrain.driveTo(0, -+
-                        200, 0, 2000);
-                driveTrain.driveTo(500, -200, 0, 2000);
-                //drawing.outtakeoTO();
-                //sleep(3000);
-                driveTrain.driveTo(100, -150, 0, 2000);
-                driveTrain.driveTo(660, -780, 90, 2000);
-                driveTrain.driveTo(660, -800, 90, 2000);
-/*
-                while (count < 12) {
-                    lift.setLevel(2);
-                    lift.move();
-                    count++;
+
+                driveTrain.driveTo(300, -300, 0, 1500);
+                driveTrain.driveTo(500, -300, 0, 1500);
+                drawing.outtake();
+                sleep(2000);
+                drawing.stop();
+                driveTrain.driveTo(100, -260, 0, 1500);
+                driveTrain.driveTo(0, -20, 0, 2500);
+                driveTrain.driveTo(520, -620, 0, 3000);
+                driveTrain.driveTo(520, -620, 90, 2500);
+                timer.reset();
+                timer.startTime();
+                if (timer.milliseconds()<0.5){
+                    lift.lift(1);
+                }
+                arm.pos7();
+
+                sleep(2000);
+                driveTrain.driveTo(520,-880,100,2000);
+                outTake.PutOut1();
+                sleep(1000);
+                driveTrain.driveTo(530, -680, 100, 2500);
+                arm.stosStart();
+                sleep(2000);
+                outTake.Stop();
+                timer.reset();
+                while (timer.seconds()<4) {
+                    lift.lift(-1);
                 }
                 sleep(2000);
-                arm.pos();
-                sleep(2000);
-                outTake.PutOut1();
-                sleep(2000);
-                driveTrain.driveTo(700, -760, 90, 2000);
-                arm.stosStart();
-                sleep(1000);
-                lift.setLevel(0);
-                lift.move();
-                sleep(1000);
-                */
 
-            }
-            else {
 
-                driveTrain.driveTo(520, 0, 0, 1000);
-                driveTrain.driveTo(520, 160, 0, 1000);
-                driveTrain.driveTo(520, 160, 45, 1000);
-                driveTrain.driveTo(520, 160, 45, 1000);
-                sleep(3000);
+                }
+
+
+
+             else{
+
+                driveTrain.driveTo(540, 0, 0, 2000);
+                driveTrain.driveTo(540, 0, 45, 2000);
+                driveTrain.driveTo(540, 200, 45, 2000);
+                drawing.outtakeo3();
+                driveTrain.driveTo(540, 0, 45, 2000);
+                driveTrain.driveTo(40,-90,0,2000);
+                drawing.stop();
                 driveTrain.driveTo(50, -50, 0, 2000);
-                driveTrain.driveTo(0, 0, 0, 2000);
+                driveTrain.driveTo(800, -620, 0, 3000);
+                driveTrain.driveTo(800, -620, 90, 2500);
+
+                timer.reset();
+                timer.startTime();
+                if (timer.milliseconds()<0.5){
+                    lift.lift(1);
+                }
+                arm.pos7();
+
+                sleep(2000);
+                driveTrain.driveTo(800,-890,100,2000);
+                outTake.PutOut1();
                 sleep(1000);
-                driveTrain.driveTo(700, -800, 90, 3000);
-/*
-                while (count < 12) {
-                    lift.setLevel(2);
-                    lift.move();
-                    count++;
+                driveTrain.driveTo(810, -680, 100, 2500);
+                arm.stosStart();
+                sleep(2000);
+                outTake.Stop();
+                timer.reset();
+                while (timer.seconds()<4) {
+                    lift.lift(-1);
                 }
                 sleep(2000);
-                arm.pos();
-                sleep(2000);
-                outTake.PutOut1();
-                sleep(2000);
-                driveTrain.driveTo(680, -760, 90, 2000);
-                arm.stosStart();
-                sleep(1000);
-                lift.setLevel(0);
-                lift.move();
-                sleep(1000);
-
-
- */
-
+                }
             }
-
         }
-    }
-}
 
+
+    }

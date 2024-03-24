@@ -59,17 +59,17 @@ public class Arm {
             this.level=level;
         }
     }
-   public void arm (){
-       double armPower=0;
-       double armTwoPower=0;
-       armPower=pid.calculate(analogInput.getMaxVoltage(),levels[level]);
-        Arm.setPosition(armPower);
-        ArmTwo.setPosition(armPower);
-        opMode.telemetry.addData("armp1",armPower);
-        //opMode.telemetry.addData("armTwo", armTwoPower);
-        opMode.telemetry.update();
-
-   }
+//   public void arm (){
+//       double armPower=0;
+//       double armTwoPower=0;
+//       armPower=pid.calculate(analogInput.getMaxVoltage(),levels[level]);
+//        Arm.setPosition(armPower);
+//        ArmTwo.setPosition(armPower);
+//        opMode.telemetry.addData("armp1",armPower);
+//        //opMode.telemetry.addData("armTwo", armTwoPower);
+//        opMode.telemetry.update();
+//
+//   }
 
     public double getpos(){
       return Arm.getPosition() ;
@@ -92,21 +92,26 @@ public class Arm {
        ArmTwo.setPosition(1);
 
    }
+    public void pos7()
+    {
+        Arm.setPosition(0.4);
+        ArmTwo.setPosition(0.4);
+
+    }
    public void InteSet(double Inteset){
        Arm.setPosition(Inteset);
        Arm.setPosition(Inteset);
    }
 
    public void  stosStart (){
-    Arm.setPosition(0);
-    ArmTwo.setPosition(0);
+    Arm.setPosition(0.01);
+    ArmTwo.setPosition(0.01);
    }
    public  void checkStop(){
        boolean is_in=false;
         if(getpos()==0){
             is_in=true;
-        }
-   }
+        }   }
 
 
  }

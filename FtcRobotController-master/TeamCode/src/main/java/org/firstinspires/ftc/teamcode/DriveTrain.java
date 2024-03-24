@@ -71,15 +71,14 @@ public class DriveTrain {
 
     double wantedAngle = 0;
     double NewAngle = 0;
-//0.0008
-    private final Pid xPid = new Pid(0.004, 0, 0.0015, 0);
 
-   // private final Pid rPid = new Pid(0.75, 0, 0, 0);
+     private final Pid xPid = new Pid(0.000892, 0.0001, 0.000001, 0);
 
-    //private final Pid yPid = new Pid(0, 0, 0, 0);
-    private final Pid yPid = new Pid(0.004, 0, 0.0015, 0);
-    //private final Pid rPid = new Pid(0.75, 0, 0, 0);
-    private final Pid rPid = new Pid(0.75, 0, 0, 0);
+
+    // private final Pid yPid = new Pid(0.004, 0, 0.0015, 0);
+    private final Pid yPid = new Pid(0.0023, 0.0002, 0, 0);
+    private final Pid rPid = new Pid(0.65, 0.000000001, 0, 0);
+    //   private final Pid rPid = new Pid(0.75, 0, 0, 0);
 
 
     public DriveTrain(HardwareMap hw, LinearOpMode opMode) {
@@ -115,17 +114,21 @@ public class DriveTrain {
         reset();
 
         // x
+     //   xPid.setTolerance(10);
         xPid.setTolerance(10);
 
-        xPid.setIntegrationBounds(-0.21,0.21);
+
+        xPid.setIntegrationBounds(-0.14,0.14);
         //y
-        yPid.setIntegrationBounds(-0.20 ,0.20);
-      //  yPid.setIntegrationBounds(-0.13 ,0.13);
-        //yPid.setTolerance(10);
+        //yPid.setIntegrationBounds(-0.195 ,0.195);
+         yPid.setIntegrationBounds(-0.2 ,0.2);
         yPid.setTolerance(10);
+        // yPid.setTolerance(10);
         //R
-        rPid.setIntegrationBounds(-0.1,0.1);
+         rPid.setIntegrationBounds(-0.2,0.2);
         rPid.setTolerance(Math.toRadians(2));
+
+
 
 
 
@@ -145,6 +148,14 @@ public class DriveTrain {
         opMode.telemetry.addData("here", true);
         opMode.telemetry.update();
         imu.resetYaw();
+
+
+    }
+    public void WheelTest(double BLM,double FLM, double FRM, double BRM){
+        LBM.setPower(BLM);
+        RFM.setPower(FRM);
+        LFM.setPower(FLM);
+        RBM.setPower(BRM);
 
 
     }
@@ -173,16 +184,14 @@ public class DriveTrain {
             return NormalizeAngle(robotHading_CCWP); //normalize the angle to be between -pi and pi
     }
 
-    public double getXlEncoder() {
-        return -LBM.getCurrentPosition();
-    }
+    public double getXlEncoder() {return -LFM.getCurrentPosition();}
 
     public double getXrEncoder() {
         return RFM.getCurrentPosition();
     }
 
     public double getYEncoder() {
-        return LFM.getCurrentPosition();
+        return LBM.getCurrentPosition();
     }
     public double getFieldX() {
         return fieldX;
@@ -255,6 +264,7 @@ public class DriveTrain {
         fieldY = y;
     }
 
+
     public void Drive(double Y, double X, double RX) {
         update();
         double heading = Heading();
@@ -279,6 +289,12 @@ public class DriveTrain {
 
 
 
+    }
+    public void DriveSlow(double X, double Y, double RX){
+        X = Range.clip(X, -0.2, 0.2);
+        Y = Range.clip(Y, -0.2, 0.2);
+        RX = Range.clip(RX,-0.2,0.2);
+        Drive(X, Y, RX);
     }
 
     public boolean driveTo(double x, double y, double r, double timeOut) {
@@ -314,7 +330,7 @@ public class DriveTrain {
             opMode.telemetry.update();
             xPower = Range.clip(xPower, -1, 1);
             yPower = Range.clip(yPower, -1, 1);
-            Drive(xPower,yPower*1.15, rPower);
+            Drive(xPower,yPower, rPower);
 
         } while ((!xPid.atSetPoint() || !yPid.atSetPoint()|| !rPid.atSetPoint()) && opMode.opModeIsActive() && !opMode.isStopRequested());//if the robot is at the position (or the op mode is off) then stop the loop//stop the robot
         Drive(0, 0, 0);

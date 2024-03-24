@@ -30,72 +30,37 @@ public class Test extends LinearOpMode {
     boolean IsUp = false;
 
 
-
     @Override
     public void runOpMode() {
         DriveTrain driveTrain = new DriveTrain(hardwareMap, this);
         Lift lift = new Lift(hardwareMap, this);
         Arm arm = new Arm(hardwareMap, this);
         driveTrain.setStartPos(0, 0, 0);
-        OutTake outTake = new OutTake(hardwareMap,this);
+        OutTake outTake = new OutTake(hardwareMap, this);
 
-         waitForStart();
+        waitForStart();
         driveTrain.reset();
         lift.reset();
-
-            if (opModeIsActive() && !isStopRequested()) {
-                timer.startTime();
-                // while (timer.seconds()<=2) {
-                    lift.setLevel(3);
-                    lift.move();
-
-                   telemetry.addData("En1", lift.getEncoder());
-                   telemetry.addData("En2",lift.getEncoder2());
-                   telemetry.update();
-                    sleep(3000);
-
-
-               // }
-                lift.setLevel(0);
-                lift.move();
-
-
-                //driveTrain.driveTo(1000, 0, 0, 30000000);
-                // driveTrain.driveTo(0, 0, 90, 30000000);
-                //  driveTrain.driveTo(0,0,90,3000000);
-              //  timer.startTime();
-               // while (timer.seconds() < 6) {
-               //     lift.setLevel(3);
-              //      lift.move();
-
-
-               // }
-
-
-                /* if (count>=6){
-                       lift.FForAtonomomus();
-                   }
-                   */
-
-                /*  arm.pos();
-                sleep(2000);
-                outTake.PutOut1();
-                arm.stosStart();
-                sleep(2000);
-                  /*
-                   sleep(2000);
-                   arm.pos();
-                   sleep(3000);
-                   arm.stosStart();
-                   sleep(3000);
+       while (opModeIsActive() && !isStopRequested()) {
+           //driveTrain.driveTo(0,0,90,300000);
+          // driveTrain.Drive(0,0,0.15);
+           //driveTrain.WheelTest(0,0,0.4,0);
+           // lift.lift(0.25);
+           //  opMode.telemetry.addData("encoder ",lift.getEncoder());
+           //lift.setLevel(4);
+           //lift.move();
+         //lift.lift(0.25);
+           timer.reset();
+           timer.startTime();
+           while (timer.seconds()<2) {
+               lift.lift(0.5);
+           }
+           lift.lift(0);
 
 
 
-
-
-
-                  */
-
-            }
-        }
+       }
+         telemetry.addData("encoder1 ",lift.getEncoder());
+         telemetry.update();
     }
+}

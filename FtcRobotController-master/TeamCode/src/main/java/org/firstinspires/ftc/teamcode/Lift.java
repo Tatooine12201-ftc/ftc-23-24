@@ -19,7 +19,7 @@ public class Lift {
     //Calculate Counts Per MM
     private final double COUNTS_PER_MM =( TICKS_PER_GOBILDA * GEAR_RATIO )/ (PULLEY_DIAMETER * Math.PI);
     //Lift Levels
-    private final int[] levels = {0,1900,1000, 600};
+    private final int[] levels = {0,1900,1000,2000,1500,600};
     // Lift Pid force
     private double KF = 0;
     // Lift Motor
@@ -45,7 +45,7 @@ public class Lift {
 
         LiftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LiftMotortow.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        LiftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        LiftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         LiftMotortow.setDirection(DcMotorSimple.Direction.REVERSE);
 
         resetEncoders();
@@ -53,15 +53,17 @@ public class Lift {
         stop();
 
         // 0.2
-        //  pid = new Pid(0, 0, 0, 0);
-        pid = new Pid(0.95, 0, 0, 0.9);
+        // pid = new Pid(0.2, 0.000001, 0.0001, 0);
+        pid = new Pid(0.26, 0, 0, 0);
 
-        // KF = pid.getF();
+         KF = pid.getF();
 
 
-      //  pid.setIntegrationBounds(-0.17, 0.17);
+
+       // pid.setIntegrationBounds(0,0 );
+        //pid.setTolerance(5);
         pid.setIntegrationBounds(-0.25,0.25 );
-        pid.setTolerance(5);
+        pid.setTolerance(50);
         stop();
 
     }
@@ -90,7 +92,7 @@ public class Lift {
 
     //set lift lvl to required lvl
     public void setLevel(int level) {
-        if (level >= 0 && level <= 4) {
+        if (level >= 0 && level <= 6) {
             this.level = level;
         }
     }
@@ -100,10 +102,10 @@ public class Lift {
             LiftMotor.setPower(pid.getF());
             LiftMotortow.setPower(pid.getF());
         }
-        if (levels[level] ==3){
-            pid.setF(0.3);
-            LiftMotor.setPower(move()+pid.getF());
-        }
+      //  if (levels[level] ==3){
+           // pid.setF(0.3);
+           // LiftMotor.setPower(move()+pid.getF());
+       // }
 
     }
     //get Encoders ticks
@@ -160,7 +162,7 @@ public class Lift {
     }
 
 
-    public double move (){
+    public boolean move (){
         double target =levels[level];
         double out =0;
         double out2 =0;
@@ -171,17 +173,30 @@ public class Lift {
        // opMode.telemetry.addData("Encoder1",ticksToMM(getEncoder()));
         //opMode.telemetry.addData("Encoder2", ticksToMM(getEncoder2()));
         opMode.telemetry.addData("target", target);
+        opMode.telemetry.addData("encoder", getEncoder());
+        opMode.telemetry.addData("error", (target-getEncoder()));
         opMode.telemetry.update();
-        return out;
+        return (pid.atSetPoint());
     }
-    public void MoveForAtonomomus(){
-        LiftMotor.setPower(0.5);
-        LiftMotortow.setPower(0.5);
+    public boolean MoveTwo(int level){
+
+        this.level = level;
+        double target =levels[level];
+        double out =0;
+        double out2 =0;
+        out=pid.calculate(getEncoder(),target);
+        out2 = pid.calculate(getEncoder2(), target);
+        LiftMotor.setPower(out);
+        LiftMotortow.setPower(out);
+        // opMode.telemetry.addData("Encoder1",ticksToMM(getEncoder()));
+        //opMode.telemetry.addData("Encoder2", ticksToMM(getEncoder2()));
+        opMode.telemetry.addData("target", target);
+         opMode.telemetry.addData("encoder", getEncoder());
+        opMode.telemetry.addData("error", (target-getEncoder()));
+        opMode.telemetry.update();
+        return (pid.atSetPoint());
     }
-    public void FForAtonomomus(){
-        LiftMotor.setPower(0.15);
-        LiftMotortow.setPower(0.15);
-    }
+
 
 
 }

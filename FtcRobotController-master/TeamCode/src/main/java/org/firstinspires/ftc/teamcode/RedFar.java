@@ -21,12 +21,15 @@ public class RedFar extends LinearOpMode {
     ColorDetector colorDetector = new ColorDetector(telemetry, true);
     Drawing drawing;
     Camera camera;
-    ColorDetector.Location location;
+    Location location;
     Lift lift;
-    OutTake outTake;
+
     ElapsedTime timer = new ElapsedTime();
     Arm arm;
     private VisionPortal visionPortal;
+    OutTake outTake;
+
+    private int count = 0;
 
 
     @Override
@@ -36,6 +39,8 @@ public class RedFar extends LinearOpMode {
         driveTrain.setStartPos(0, 0, 0);
         Arm arm = new Arm(hardwareMap, this);
         Lift lift = new Lift(hardwareMap, this);
+        OutTake outTake = new OutTake(hardwareMap, this);
+
 
         VisionPortal.Builder builder = new VisionPortal.Builder();
         builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"));
@@ -49,49 +54,119 @@ public class RedFar extends LinearOpMode {
         while (opModeInInit()) {
             location = colorDetector.getLocation();
 
-            sleep(50);
+            sleep(30);
         }
         visionPortal.setProcessorEnabled(colorDetector, false);
         if (opModeIsActive() && !isStopRequested()) {
-            if (location == ColorDetector.Location.MIDDLE) {
-                driveTrain.driveTo(650, 70, 0, 1500);
-                drawing.outtakeoTO();
-                sleep(1000);
+
+            if (location == Location.MIDDLE) {
+                driveTrain.driveTo(730,100, 0, 2500);
+                drawing.outtakeo3();
+                sleep(1500);
                 drawing.stop();
-                driveTrain.driveTo(680, 780, 90, 2000);
-                // outTake.PutOut1();
-                driveTrain.driveTo(680, 700, 90, 2000);
-                driveTrain.driveTo(680, 800, 90, 2000);
+                driveTrain.driveTo(0, 20, 0, 2500);
+                driveTrain.driveTo(640, 620, 0, 2500);
+                driveTrain.driveTo(640, 620, -100, 2500);
+                timer.reset();
+                timer.startTime();
+                while (timer.milliseconds()<0.5){
+                    lift.lift(1);
+                }
+                arm.pos7();
+
+                sleep(2000);
+                driveTrain.driveTo(640,880,-100,2000);
+                outTake.PutOut1();
+                sleep(1000);
+                driveTrain.driveTo(650, 660, -100, 2500);
+                arm.stosStart();
+                sleep(2000);
+                outTake.Stop();
+                timer.reset();
+                while (timer.seconds()<4) {
+                    lift.lift(-1);
+                }
+                sleep(2000);
+
+
+            } else if (location == Location.LEFT) {
+
+                driveTrain.driveTo(540, 0, 0, 2000);
+                driveTrain.driveTo(540, 0, -45, 2000);
+                driveTrain.driveTo(540, -200, -45, 2000);
+                drawing.outtakeo3();
+                driveTrain.driveTo(540, 0, -45, 2000);
+                driveTrain.driveTo(40,90,0,2000);
+                drawing.stop();
+                driveTrain.driveTo(50, 50, 0, 2000);
+                driveTrain.driveTo(800, 620, 0, 3000);
+                driveTrain.driveTo(800, 620, -90, 2500);
+
+                timer.reset();
+                timer.startTime();
+                if (timer.milliseconds()<0.5){
+                    lift.lift(1);
+                }
+                arm.pos7();
+
+                sleep(2000);
+                driveTrain.driveTo(800,890,-100,2000);
+                outTake.PutOut1();
+                sleep(1000);
+                driveTrain.driveTo(810, 680, -100, 2500);
+                arm.stosStart();
+                sleep(2000);
+                outTake.Stop();
+                timer.reset();
+                while (timer.seconds()<4) {
+                    lift.lift(-1);
+                }
+                sleep(2000);
+
+
+            }
+
+
+
+            else{
+                driveTrain.driveTo(300, 300, 0, 1500);
+                driveTrain.driveTo(500, 300, 0, 1500);
+                drawing.outtakeo3();
+                sleep(2000);
+                drawing.stop();
+                driveTrain.driveTo(100, 260, 0, 1500);
+                driveTrain.driveTo(0, 20, 0, 2500);
+                driveTrain.driveTo(520, 620, 0, 3000);
+                driveTrain.driveTo(520, 620, -90, 2500);
+                timer.reset();
+                timer.startTime();
+                if (timer.milliseconds()<0.5){
+                    lift.lift(1);
+                }
+                arm.pos7();
+
+                sleep(2000);
+                driveTrain.driveTo(520,880,-100,2000);
+                outTake.PutOut1();
+                sleep(1000);
+                driveTrain.driveTo(530, 680, -100, 2500);
+                arm.stosStart();
+                sleep(2000);
+                outTake.Stop();
+                timer.reset();
+                while (timer.seconds()<4) {
+                    lift.lift(-1);
+                }
+                sleep(2000);
 
 
 
             }
-            else if (location == ColorDetector.Location.RIGHT) {
-                driveTrain.driveTo(300, 270, 0, 1500);
-                driveTrain.driveTo(500, 270, 0, 1500);
-                driveTrain.driveTo(100, 270, 0, 1500);
-                driveTrain.driveTo(680, 780, 90, 2000);
-                // outTake.PutOut1();
-                driveTrain.driveTo(680, 700, 90, 2000);
-                driveTrain.driveTo(680, 800, 90, 2000);
 
 
-            }
-            else {
-                driveTrain.driveTo(530, 0, 0, 1000);
-                driveTrain.driveTo(530, 0, -45, 1000);
-                driveTrain.driveTo(530, -240, -45, 1000);
-                driveTrain.driveTo(50, 50, 0, 1000);
-                driveTrain.driveTo(680, 780, 90, 2000);
-                // outTake.PutOut1();
-                driveTrain.driveTo(680, 700, 90, 2000);
-                driveTrain.driveTo(680, 800, 90, 2000);
-
-
-            }
 
         }
-
-
     }
+
+
 }
