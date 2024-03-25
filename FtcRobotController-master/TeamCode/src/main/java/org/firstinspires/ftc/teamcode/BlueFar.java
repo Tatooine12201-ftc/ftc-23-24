@@ -70,7 +70,7 @@ public class BlueFar extends LinearOpMode {
                 timer.reset();
                 timer.startTime();
                 if (timer.milliseconds()<0.5){
-                    lift.lift(1);
+                    lift.GoTo();
                 }
                 arm.pos7();
 
@@ -84,7 +84,7 @@ public class BlueFar extends LinearOpMode {
                 outTake.Stop();
                 timer.reset();
                 while (timer.seconds()<4) {
-                    lift.lift(-1);
+                    lift.lift_t(-1);
                 }
                 sleep(2000);
 
@@ -104,21 +104,21 @@ public class BlueFar extends LinearOpMode {
                 timer.reset();
                 timer.startTime();
                 if (timer.milliseconds()<0.5){
-                    lift.lift(1);
+                    lift.GoTo();
                 }
                 arm.pos7();
 
                 sleep(2000);
-                driveTrain.driveTo(520,-880,100,2000);
+                driveTrain.driveTo(540,-880,100,2000);
                 outTake.PutOut1();
                 sleep(1000);
-                driveTrain.driveTo(530, -680, 100, 2500);
+                driveTrain.driveTo(500, -680, 100, 2500);
                 arm.stosStart();
                 sleep(2000);
                 outTake.Stop();
                 timer.reset();
                 while (timer.seconds()<4) {
-                    lift.lift(-1);
+                    lift.lift_t(-1);
                 }
                 sleep(2000);
 
@@ -143,7 +143,7 @@ public class BlueFar extends LinearOpMode {
                 timer.reset();
                 timer.startTime();
                 if (timer.milliseconds()<0.5){
-                    lift.lift(1);
+                    lift.GoTo();
                 }
                 arm.pos7();
 
@@ -157,7 +157,7 @@ public class BlueFar extends LinearOpMode {
                 outTake.Stop();
                 timer.reset();
                 while (timer.seconds()<4) {
-                    lift.lift(-1);
+                    lift.lift_t(-1);
                 }
                 sleep(2000);
                 }

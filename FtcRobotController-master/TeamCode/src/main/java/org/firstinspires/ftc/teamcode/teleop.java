@@ -27,6 +27,7 @@ public class teleop extends LinearOpMode {
     boolean IsLiftDown = true;
     boolean IsSlow = false;
     private final boolean isbussy = true;
+    boolean climb = false;
 
     @Override
     public void runOpMode() {
@@ -84,7 +85,7 @@ public class teleop extends LinearOpMode {
                 arm.pos7();
             }
 
-            lift.lift(-gamepad2.right_stick_y);
+            lift.lift_t(-gamepad2.right_stick_y);
 
           //  if (gamepad2.triangle) {
           //      lift.setLevel(1);
@@ -93,9 +94,21 @@ public class teleop extends LinearOpMode {
           //  }
 
 
-            if (gamepad2.dpad_down) {
-              lift.lift(-1);
+
+
+
+            if (gamepad2.dpad_down && climb ==false) {
+              climb=true;
                 }
+            else if (climb ==true){
+                lift.lift_t(-1);
+            }
+
+
+
+            //if (climb ==true &&gamepad2.dpad_down){
+             //   climb =false;
+           // }
 
 
             if (gamepad2.dpad_up) {

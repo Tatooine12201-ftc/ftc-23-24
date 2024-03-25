@@ -94,8 +94,8 @@ public class Arm {
    }
     public void pos7()
     {
-        Arm.setPosition(0.4);
-        ArmTwo.setPosition(0.4);
+        Arm.setPosition(0.55);
+        ArmTwo.setPosition(0.55);
 
     }
    public void InteSet(double Inteset){

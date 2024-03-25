@@ -39,28 +39,12 @@ public class Test extends LinearOpMode {
         OutTake outTake = new OutTake(hardwareMap, this);
 
         waitForStart();
-        driveTrain.reset();
         lift.reset();
        while (opModeIsActive() && !isStopRequested()) {
-           //driveTrain.driveTo(0,0,90,300000);
-          // driveTrain.Drive(0,0,0.15);
-           //driveTrain.WheelTest(0,0,0.4,0);
-           // lift.lift(0.25);
-           //  opMode.telemetry.addData("encoder ",lift.getEncoder());
-           //lift.setLevel(4);
-           //lift.move();
-         //lift.lift(0.25);
-           timer.reset();
-           timer.startTime();
-           while (timer.seconds()<2) {
-               lift.lift(0.5);
-           }
-           lift.lift(0);
+        lift.GoTo();
 
-
-
-       }
          telemetry.addData("encoder1 ",lift.getEncoder());
          telemetry.update();
+    }
     }
 }

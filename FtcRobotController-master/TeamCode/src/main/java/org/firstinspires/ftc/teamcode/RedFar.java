@@ -70,7 +70,7 @@ public class RedFar extends LinearOpMode {
                 timer.reset();
                 timer.startTime();
                 while (timer.milliseconds()<0.5){
-                    lift.lift(1);
+                    lift.GoTo();
                 }
                 arm.pos7();
 
@@ -84,7 +84,7 @@ public class RedFar extends LinearOpMode {
                 outTake.Stop();
                 timer.reset();
                 while (timer.seconds()<4) {
-                    lift.lift(-1);
+                    lift.lift_t(-1);
                 }
                 sleep(2000);
 
@@ -105,7 +105,7 @@ public class RedFar extends LinearOpMode {
                 timer.reset();
                 timer.startTime();
                 if (timer.milliseconds()<0.5){
-                    lift.lift(1);
+                    lift.GoTo();
                 }
                 arm.pos7();
 
@@ -119,7 +119,7 @@ public class RedFar extends LinearOpMode {
                 outTake.Stop();
                 timer.reset();
                 while (timer.seconds()<4) {
-                    lift.lift(-1);
+                    lift.lift_t(-1);
                 }
                 sleep(2000);
 
@@ -141,7 +141,7 @@ public class RedFar extends LinearOpMode {
                 timer.reset();
                 timer.startTime();
                 if (timer.milliseconds()<0.5){
-                    lift.lift(1);
+                    lift.GoTo();
                 }
                 arm.pos7();
 
@@ -155,7 +155,7 @@ public class RedFar extends LinearOpMode {
                 outTake.Stop();
                 timer.reset();
                 while (timer.seconds()<4) {
-                    lift.lift(-1);
+                    lift.lift_t(-1);
                 }
                 sleep(2000);
 

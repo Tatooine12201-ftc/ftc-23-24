@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class Lift {
 //ticks per revolution
@@ -52,18 +53,15 @@ public class Lift {
 
         stop();
 
-        // 0.2
         // pid = new Pid(0.2, 0.000001, 0.0001, 0);
-        pid = new Pid(0.26, 0, 0, 0);
+        pid = new Pid(0.11, 0.00015, 0.000000001, 0);
 
-         KF = pid.getF();
+       //  KF = pid.getF();
 
-
-
-       // pid.setIntegrationBounds(0,0 );
+       pid.setIntegrationBounds(-0.21,0.21);
         //pid.setTolerance(5);
-        pid.setIntegrationBounds(-0.25,0.25 );
-        pid.setTolerance(50);
+       // pid.setIntegrationBounds(-0.25,0.25 );
+        pid.setTolerance(10);
         stop();
 
     }
@@ -122,6 +120,14 @@ public class Lift {
         return pid.getF();
     }
 
+    public void  GoTo(){
+        while (LiftMotor.getCurrentPosition()<1450){
+            lift_t(1);
+
+        }
+        stop();
+    }
+
     //reset encoders ticks
     public void reset() {
         resetEncoders();
@@ -134,10 +140,11 @@ public class Lift {
        LiftMotortow.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public void lift (double power ){
+    public void lift_t(double power ){
             LiftMotor.setPower(power);
             LiftMotortow.setPower(power);
         }
+
 
 
     public void setF() {
@@ -165,9 +172,9 @@ public class Lift {
     public boolean move (){
         double target =levels[level];
         double out =0;
-        double out2 =0;
+       // double out2 =0;
         out=pid.calculate(getEncoder(),target);
-        out2 = pid.calculate(getEncoder2(), target);
+       // out2 = pid.calculate(getEncoder2(), target);
         LiftMotor.setPower(out);
         LiftMotortow.setPower(out);
        // opMode.telemetry.addData("Encoder1",ticksToMM(getEncoder()));
@@ -178,24 +185,7 @@ public class Lift {
         opMode.telemetry.update();
         return (pid.atSetPoint());
     }
-    public boolean MoveTwo(int level){
 
-        this.level = level;
-        double target =levels[level];
-        double out =0;
-        double out2 =0;
-        out=pid.calculate(getEncoder(),target);
-        out2 = pid.calculate(getEncoder2(), target);
-        LiftMotor.setPower(out);
-        LiftMotortow.setPower(out);
-        // opMode.telemetry.addData("Encoder1",ticksToMM(getEncoder()));
-        //opMode.telemetry.addData("Encoder2", ticksToMM(getEncoder2()));
-        opMode.telemetry.addData("target", target);
-         opMode.telemetry.addData("encoder", getEncoder());
-        opMode.telemetry.addData("error", (target-getEncoder()));
-        opMode.telemetry.update();
-        return (pid.atSetPoint());
-    }
 
 
 

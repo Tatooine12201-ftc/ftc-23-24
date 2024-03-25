@@ -52,7 +52,7 @@ public class RedClose extends LinearOpMode {
         visionPortal.setProcessorEnabled(colorDetector, false);
         if (opModeIsActive() && !isStopRequested()) {
             if (location == ColorDetector.Location.MIDDLE) {
-                
+
 
                 driveTrain.driveTo(710, -110, 0, 3000);
                 drawing.outtakeoTO();
