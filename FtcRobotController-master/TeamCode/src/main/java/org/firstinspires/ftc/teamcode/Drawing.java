@@ -40,6 +40,12 @@ public class Drawing {
 
         drawing.setPower(-0.12);
     }
+    public void outtakeo4() {
+
+        drawing.setPower(-0.15);
+    }
+
+
 
 
 }

@@ -61,7 +61,7 @@ public class RedFar extends LinearOpMode {
 
             if (location == Location.MIDDLE) {
                 driveTrain.driveTo(730,100, 0, 2500);
-                drawing.outtakeo3();
+                drawing.outtakeoTO();
                 sleep(1500);
                 drawing.stop();
                 driveTrain.driveTo(0, 20, 0, 2500);
@@ -78,7 +78,7 @@ public class RedFar extends LinearOpMode {
                 driveTrain.driveTo(640,880,-100,2000);
                 outTake.PutOut1();
                 sleep(1000);
-                driveTrain.driveTo(650, 660, -100, 2500);
+                driveTrain.driveTo(650, 700, -100, 2500);
                 arm.stosStart();
                 sleep(2000);
                 outTake.Stop();
@@ -93,7 +93,7 @@ public class RedFar extends LinearOpMode {
 
                 driveTrain.driveTo(540, 0, 0, 2000);
                 driveTrain.driveTo(540, 0, -45, 2000);
-                driveTrain.driveTo(540, -200, -45, 2000);
+                driveTrain.driveTo(540, -210, -45, 2000);
                 drawing.outtakeo3();
                 driveTrain.driveTo(540, 0, -45, 2000);
                 driveTrain.driveTo(40,90,0,2000);
@@ -113,7 +113,7 @@ public class RedFar extends LinearOpMode {
                 driveTrain.driveTo(800,890,-100,2000);
                 outTake.PutOut1();
                 sleep(1000);
-                driveTrain.driveTo(810, 680, -100, 2500);
+                driveTrain.driveTo(810, 700, -100, 2500);
                 arm.stosStart();
                 sleep(2000);
                 outTake.Stop();
@@ -130,7 +130,7 @@ public class RedFar extends LinearOpMode {
 
             else{
                 driveTrain.driveTo(300, 300, 0, 1500);
-                driveTrain.driveTo(500, 300, 0, 1500);
+                driveTrain.driveTo(505, 300, 0, 1500);
                 drawing.outtakeo3();
                 sleep(2000);
                 drawing.stop();
@@ -149,7 +149,7 @@ public class RedFar extends LinearOpMode {
                 driveTrain.driveTo(520,880,-100,2000);
                 outTake.PutOut1();
                 sleep(1000);
-                driveTrain.driveTo(530, 680, -100, 2500);
+                driveTrain.driveTo(530, 700, -100, 2500);
                 arm.stosStart();
                 sleep(2000);
                 outTake.Stop();

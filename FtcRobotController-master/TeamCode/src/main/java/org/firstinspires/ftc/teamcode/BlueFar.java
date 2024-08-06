@@ -151,7 +151,7 @@ public class BlueFar extends LinearOpMode {
                 driveTrain.driveTo(800,-890,100,2000);
                 outTake.PutOut1();
                 sleep(1000);
-                driveTrain.driveTo(810, -680, 100, 2500);
+                driveTrain.driveTo(820, -680, 100, 2500);
                 arm.stosStart();
                 sleep(2000);
                 outTake.Stop();

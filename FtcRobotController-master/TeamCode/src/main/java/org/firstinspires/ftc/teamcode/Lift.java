@@ -121,7 +121,7 @@ public class Lift {
     }
 
     public void  GoTo(){
-        while (LiftMotor.getCurrentPosition()<1450){
+        while (LiftMotor.getCurrentPosition()<1500){
             lift_t(1);
 
         }
